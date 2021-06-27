@@ -10,4 +10,4 @@ Net 结构        :   2 * ( Conv + LRelu + Pool ) + 2 * ( FullConn + LRelu ) + S
 
 3、 水平有限，代码有不完善的地方请在ISSUE批评指正！
 
-4.  g++ MatrixQL_Test.cc  -o test -I /usr/include/eigen3/
+4.  g++ Source.cpp -o test  -I /opt/intel/mkl/include -I /usr/include/eigen3/

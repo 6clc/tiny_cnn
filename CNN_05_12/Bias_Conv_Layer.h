@@ -2,67 +2,67 @@
 #include "LayerQL.h"
 namespace tinyDNN
 {
-	template <typename Dtype>
-	class Bias_Conv_Layer : public LayerQL<Dtype>
-	{
-	public:
-		//									   ¼¸Æ¬			 ÐÐÊý		 ÁÐÊý
-		Bias_Conv_Layer( LayerType type, int kernelNum, int rowNum, int colNum ) : LayerQL(type), kernelNum(kernelNum), rowNum(rowNum), colNum(colNum)
-		{
-			std::cout << "Bias_Conv_Layer Start!" << std::endl;
+  template <typename Dtype>
+  class Bias_Conv_Layer : public LayerQL<Dtype>
+  {
+  public:
+    //									   ï¿½ï¿½Æ¬			 ï¿½ï¿½ï¿½ï¿½		 ï¿½ï¿½ï¿½ï¿½
+    Bias_Conv_Layer(LayerType type, int kernelNum, int rowNum, int colNum) : LayerQL(type), kernelNum(kernelNum), rowNum(rowNum), colNum(colNum)
+    {
+      std::cout << "Bias_Conv_Layer Start!" << std::endl;
 
-			b_MatrixQL.reserve( kernelNum );
-			for ( int i = 0; i < kernelNum; i++ )
-			{
-				b_MatrixQL.push_back( std::make_unique<MatrixQL<Dtype>>( rowNum, colNum ) );
-				b_MatrixQL.back()->setMatrixQL().setConstant(0.1);
-			}
-		}
+      b_MatrixQL.reserve(kernelNum);
+      for (int i = 0; i < kernelNum; i++)
+      {
+        b_MatrixQL.push_back(std::make_unique<MatrixQL<Dtype>>(rowNum, colNum));
+        b_MatrixQL.back()->setMatrixQL().setConstant(0.1);
+      }
+    }
 
-		~Bias_Conv_Layer() override final
-		{
-			std::cout << "Bias_Conv_Layer Over!" << std::endl;
-		}
+    ~Bias_Conv_Layer() override final
+    {
+      std::cout << "Bias_Conv_Layer Over!" << std::endl;
+    }
 
-		void calForward(int type = 0) const override final
-		{
-			//	Ã¿´ÎÏòÇ°´«²¥ÏÈÇåÀíµô¼¯ºÏÖÐµÄÄÚÈÝÔÙÖØÐÂ²åÈë£¬ÕâÀïÃ²ËÆ¿ÉÒÔÓÅ»¯
-			this->right_Layer->forward_Matrix_Vector.clear();
+    void calForward(int type = 0) const override final
+    {
+      //	Ã¿ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â²ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Ã²ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½Å»ï¿½
+      this->right_Layer->forward_Matrix_Vector.clear();
 
-			for (int i = 0; i < kernelNum; i++)
-			{
-				std::shared_ptr<MatrixQL<Dtype>> outMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
-				outMatrix->setMatrixQL().setZero();
+      for (int i = 0; i < kernelNum; i++)
+      {
+        std::shared_ptr<MatrixQL<Dtype>> outMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
+        outMatrix->setMatrixQL().setZero();
 
-				outMatrix->setMatrixQL() = this->left_Layer->forward_Matrix_Vector[i]->getMatrixQL() + b_MatrixQL[i]->getMatrixQL();
-				this->right_Layer->forward_Matrix_Vector.push_back(outMatrix);
-			}
-		}
+        outMatrix->setMatrixQL() = this->left_Layer->forward_Matrix_Vector[i]->getMatrixQL() + b_MatrixQL[i]->getMatrixQL();
+        this->right_Layer->forward_Matrix_Vector.push_back(outMatrix);
+      }
+    }
 
-		void calBackward(int type = 0) override final
-		{
-			this->left_Layer->backward_Matrix_Vector = this->right_Layer->backward_Matrix_Vector;
-		}
+    void calBackward(int type = 0) override final
+    {
+      this->left_Layer->backward_Matrix_Vector = this->right_Layer->backward_Matrix_Vector;
+    }
 
-		void upMatrix() override final
-		{
-			for ( int i = 0; i < kernelNum; i++ )
-			{
-				this->b_MatrixQL[i]->setMatrixQL() = this->b_MatrixQL[i]->getMatrixQL() - 0.1 * this->right_Layer->backward_Matrix_Vector[i]->getMatrixQL();
-			}
-		}
+    void upMatrix() override final
+    {
+      for (int i = 0; i < kernelNum; i++)
+      {
+        this->b_MatrixQL[i]->setMatrixQL() = this->b_MatrixQL[i]->getMatrixQL() - 0.1 * this->right_Layer->backward_Matrix_Vector[i]->getMatrixQL();
+      }
+    }
 
-		void upMatrix_batch(Dtype upRate) override final {};
+    void upMatrix_batch(Dtype upRate) override final{};
 
-	public:
-		//std::vector<std::shared_ptr<Conv_Kernel<Dtype>>> conv_Kernel_Vector;
-		std::vector<std::unique_ptr<MatrixQL<Dtype>>> b_MatrixQL;
+  public:
+    //std::vector<std::shared_ptr<Conv_Kernel<Dtype>>> conv_Kernel_Vector;
+    std::vector<std::unique_ptr<MatrixQL<Dtype>>> b_MatrixQL;
 
-		//¾í»ýºËµÄ¸öÊý
-		int kernelNum;
-		//´«Èë¾ØÕóµÄÐÐºÍÁÐ
-		int rowNum;
-		int colNum;
-		//std::unique_ptr<MatrixQL<Dtype>> b_MatrixQL;
-	};
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄ¸ï¿½ï¿½ï¿½
+    int kernelNum;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½
+    int rowNum;
+    int colNum;
+    //std::unique_ptr<MatrixQL<Dtype>> b_MatrixQL;
+  };
 }

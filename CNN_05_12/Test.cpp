@@ -2,629 +2,618 @@
 
 namespace tinyDNN
 {
-	////¼ÓÔØMNISTÊý¾Ý¼¯£¬ÑµÁ·¼¯£¬55000¸ö
-	//std::shared_ptr<Inter_LayerQL<double>> Test::input_Layer = std::make_shared<Inter_LayerQL<double>>(55000, 784);
-	//std::shared_ptr<Inter_LayerQL<double>> Test::output_Layer = std::make_shared<Inter_LayerQL<double>>(55000, 10);
-	////¼ÓÔØMNISTÊý¾Ý¼¯£¬²âÊÔ¼¯£¬10000¸ö
-	//std::shared_ptr<Inter_LayerQL<double>> Test::input_Layer_T = std::make_shared<Inter_LayerQL<double>>(10000, 784);
-	//std::shared_ptr<Inter_LayerQL<double>> Test::output_Layer_T = std::make_shared<Inter_LayerQL<double>>(10000, 10);
-
-	Test::Test()
-	{
-		//Full_Layer ForwardTrans	²âÊÔÈ«Á¬½Ó²ãµÄÏòÇ°´«²¥
-		//this->Fullconnect_Layer_Forward_Test();
-		////Full_Layer BackwardTrans	²âÊÔÈ«Á¬½Ó²ãµÄÏòºó´«²¥
-		//this->Fullconnect_Layer_Backward_Test();
-		//Full_Layer_update		²âÊÔÈ«Á¬½Ó²ãµÄÈ¨ÖØ¸üÐÂ£¬ÕâÀïÓÃµÄÊÇSGD£¬Ã¿´ÎÀ´Ò»¸öÐÂÊý¾Ý¸üÐÂÒ»´Î
-		//this->Fullconnect_Layer_Update_Test();
-		//Full_Layer_update_batch	²âÊÔÈ«Á¬½Ó²ãµÄÈ¨ÖØ¸üÐÂ£¬ÕâÀïÓÃµÄÊÇMBGD£¬°´ÕÕBATCHÀ´¸üÐÂ
-		//this->Fullconnect_Layer_Update_Batch_Test();
-
-		//======================================================================================
-
-		////Bias_Layer ForwardTrans		²âÊÔBias²ãµÄÏòÇ°´«²¥
-		//this->Bias_Layer_Forward_Test();
-		////Bias_Layer BackwardTrans	²âÊÔBias²ãµÄÏòºó´«²¥
-		//this->Bias_Layer_Backward_Test();
-		////Bias_Layer update	²âÊÔbias²ãµÄb¸üÐÂ£¬²ÉÓÃSGD
-		//this->Bias_Layer_Update_Test();
-		////Bias_Layer_Batch update		²âÊÔbias²ãµÄb¸üÐÂ£¬²ÉÓÃMBGD
-		//this->Bias_Layer_Update_Batch_Test();
-
-		//======================================================================================
-
-		//Operator_Layer	²âÊÔÓÑÔªÔËËã·ûÖØÔØ + £¬½«ÖÐ¼ä²ãºÍÈ¨ÖØµÈ²ãÁ¬½ÓÆðÀ´
-		//this->Operator_Test();
-
-		//======================================================================================
-
-		//Sigmoid_LayerQL ForwardTrans	²âÊÔSigmoid¼¤»îº¯ÊýµÄÏòÇ°´«²¥
-		//this->Sigmoid_LayerQL_Forward_Test();
-		//Sigmoid_LayerQL BackwardTrans	²âÊÔSigmoid¼¤»îº¯ÊýµÄ·´Ïò´«²¥
-		//this->Sigmoid_LayerQL_Backward_Test();
-
-		//======================================================================================
-
-		//MSE_LOSS_BACKWARD_TEST()	²âÊÔLoss²ãµÄ·´Ïò´«²¥
-		//this->MSE_Loss_LayerQL_Backward_Test();
-
-		//======================================================================================
-		////²âÊÔSGD
-		this->Mnist_Test();
-		////²âÊÔÅúÁ¿ÏÂ½µ 100Ò»×é
-		//this->Mnist_Test_02();
-		//²âÊÔÅúÁ¿ÏÂ¼Ü£¬10Ò»×é
-		//this->Mnist_Test_03();
-
-		//======================================================================================
-		////²âÊÔ¼ÓÔØ¾í»ý¶þÎ¬Í¼Ïñ,ÑµÁ·¼¯
-		//LoadCSV::loadCSVTrain();
-		//LoadCSV::loadCSV_Train_Vector();
-		////²âÊÔ¼ÓÔØ¾í»ý¶þÎ¬Í¼Ïñ£¬²âÊÔ¼¯
-		//LoadCSV::loadCSVTest();
-		//LoadCSV::loadCSV_Test_Vector();
-		
-		//======================================================================================
-		////²âÊÔMnist¾í»ý¼ÆËã
-		//this->Mnist_Test_Conv();
-
-
-	}
-
-	Test::~Test(){}
-	
-	//============================================================================
-
-	//²âÊÔÈ«Á¬½Ó²ãµÄÇ°Ïò´«²¥
-	void Test::Fullconnect_Layer_Forward_Test()
-	{
-		//	´´½¨ÊäÈëÖÇÄÜÖ¸Õë
-		std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(2,3);
-		left_Layer->forward_Matrix->setMatrixQL() << 1,2,3,4,5,6;
-		std::cout << left_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		//	´´½¨µÚÒ»¸öÈ«Á¬½Ó²ã
-		std::shared_ptr<LayerQL<double>> fullLayerTest = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 3, 5);
-		//	ÊäÈëÓëÈ«Á¬½Ó²ãµÄÏà³Ë
-		std::shared_ptr<Inter_LayerQL<double>> out_01 = left_Layer + fullLayerTest;
-		//	ÏòÇ°¼ÆËãÈ«Á¬½Ó
-		fullLayerTest->calForward();
-		//	Êä³öÈ«Á¬½ÓÇ°ºóµÄ²ã
-		std::cout << fullLayerTest->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		std::cout << fullLayerTest->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		//	´´½¨µÚ¶þ¸öÈ«Á¬½Ó²ã
-		std::shared_ptr<LayerQL<double>> fullLayerTest_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 5, 7);
-		std::shared_ptr<Inter_LayerQL<double>> out_02 = out_01 + fullLayerTest_02;
-		//	µÚ¶þ¸öÈ«Á¬½Ó²ãÏòÇ°¼ÆËã
-		fullLayerTest_02->calForward();
-		//	Êä³öµÚ¶þ¸öÈ«Á¬½Ó²ãµÄ¼ÆËã½á¹û
-		std::cout << fullLayerTest_02->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		std::cout << fullLayerTest_02->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
-	}
-	//²âÊÔÈ«Á¬½Ó²ãµÄ·´Ïò´«²¥
-	void Test::Fullconnect_Layer_Backward_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> InLayer_01 = std::make_shared<Inter_LayerQL<double>>();
-
-		//	µÚÒ»²ãÖÐ¼ä²ã
-		std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer,2,3);
-		//	µÚÒ»²ãÊä³ö
-		std::shared_ptr<Inter_LayerQL<double>> InLayer_02 = InLayer_01 + fullLayer_01;
-		//	µÚ¶þ²ãÖÐ¼ä²ã
-		std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer,3,5);
-		//	µÚ¶þ²ãÊä³ö
-		std::shared_ptr<Inter_LayerQL<double>> InLayer_03 = InLayer_02 + fullLayer_02;
-		//	³õÊ¼»¯µÚ¶þ²ãµÄLOSS
-		InLayer_03->backward_Matrix = std::make_unique<MatrixQL<double>>(1, 5);
-		InLayer_03->backward_Matrix->setMatrixQL().setConstant(1.0);
-		
-		std::cout << fullLayer_02->right_Layer->backward_Matrix->getMatrixQL() << std::endl;
-		fullLayer_02->calBackward();
-		std::cout << fullLayer_02->left_Layer->backward_Matrix->getMatrixQL() << std::endl;		
-		
-		int mm = 0;
+  ////ï¿½ï¿½ï¿½ï¿½MNISTï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½55000ï¿½ï¿½
+  //std::shared_ptr<Inter_LayerQL<double>> Test::input_Layer = std::make_shared<Inter_LayerQL<double>>(55000, 784);
+  //std::shared_ptr<Inter_LayerQL<double>> Test::output_Layer = std::make_shared<Inter_LayerQL<double>>(55000, 10);
+  ////ï¿½ï¿½ï¿½ï¿½MNISTï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½10000ï¿½ï¿½
+  //std::shared_ptr<Inter_LayerQL<double>> Test::input_Layer_T = std::make_shared<Inter_LayerQL<double>>(10000, 784);
+  //std::shared_ptr<Inter_LayerQL<double>> Test::output_Layer_T = std::make_shared<Inter_LayerQL<double>>(10000, 10);
+
+  Test::Test()
+  {
+    //Full_Layer ForwardTrans	ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    //this->Fullconnect_Layer_Forward_Test();
+    ////Full_Layer BackwardTrans	ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ó´«²ï¿½
+    //this->Fullconnect_Layer_Backward_Test();
+    //Full_Layer_update		ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½È¨ï¿½Ø¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½SGDï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+    //this->Fullconnect_Layer_Update_Test();
+    //Full_Layer_update_batch	ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½È¨ï¿½Ø¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½MBGDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BATCHï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //this->Fullconnect_Layer_Update_Batch_Test();
+
+    //======================================================================================
+
+    ////Bias_Layer ForwardTrans		ï¿½ï¿½ï¿½ï¿½Biasï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    //this->Bias_Layer_Forward_Test();
+    ////Bias_Layer BackwardTrans	ï¿½ï¿½ï¿½ï¿½Biasï¿½ï¿½ï¿½ï¿½ï¿½ó´«²ï¿½
+    //this->Bias_Layer_Backward_Test();
+    ////Bias_Layer update	ï¿½ï¿½ï¿½ï¿½biasï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½SGD
+    //this->Bias_Layer_Update_Test();
+    ////Bias_Layer_Batch update		ï¿½ï¿½ï¿½ï¿½biasï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½MBGD
+    //this->Bias_Layer_Update_Batch_Test();
+
+    //======================================================================================
+
+    //Operator_Layer	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½È¨ï¿½ØµÈ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //this->Operator_Test();
+
+    //======================================================================================
+
+    //Sigmoid_LayerQL ForwardTrans	ï¿½ï¿½ï¿½ï¿½Sigmoidï¿½ï¿½ï¿½îº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    //this->Sigmoid_LayerQL_Forward_Test();
+    //Sigmoid_LayerQL BackwardTrans	ï¿½ï¿½ï¿½ï¿½Sigmoidï¿½ï¿½ï¿½îº¯ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ò´«²ï¿½
+    //this->Sigmoid_LayerQL_Backward_Test();
+
+    //======================================================================================
+
+    //MSE_LOSS_BACKWARD_TEST()	ï¿½ï¿½ï¿½ï¿½Lossï¿½ï¿½Ä·ï¿½ï¿½ò´«²ï¿½
+    //this->MSE_Loss_LayerQL_Backward_Test();
+
+    //======================================================================================
+    ////ï¿½ï¿½ï¿½ï¿½SGD
+    this->Mnist_Test();
+    ////ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ 100Ò»ï¿½ï¿½
+    //this->Mnist_Test_02();
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼Ü£ï¿½10Ò»ï¿½ï¿½
+    //this->Mnist_Test_03();
+
+    //======================================================================================
+    ////ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½Î¬Í¼ï¿½ï¿½,Ñµï¿½ï¿½ï¿½ï¿½
+    //LoadCSV::loadCSVTrain();
+    //LoadCSV::loadCSV_Train_Vector();
+    ////ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½Î¬Í¼ï¿½ñ£¬²ï¿½ï¿½Ô¼ï¿½
+    //LoadCSV::loadCSVTest();
+    //LoadCSV::loadCSV_Test_Vector();
+
+    //======================================================================================
+    ////ï¿½ï¿½ï¿½ï¿½Mnistï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //this->Mnist_Test_Conv();
+  }
+
+  Test::~Test() {}
+
+  //============================================================================
+
+  //ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½Ç°ï¿½ò´«²ï¿½
+  void Test::Fullconnect_Layer_Forward_Test()
+  {
+    //	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(2, 3);
+    left_Layer->forward_Matrix->setMatrixQL() << 1, 2, 3, 4, 5, 6;
+    std::cout << left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    //	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayerTest = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 3, 5);
+    //	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> out_01 = left_Layer + fullLayerTest;
+    //	ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½
+    fullLayerTest->calForward();
+    //	ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½Ä²ï¿½
+    std::cout << fullLayerTest->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << fullLayerTest->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    //	ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayerTest_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 5, 7);
+    std::shared_ptr<Inter_LayerQL<double>> out_02 = out_01 + fullLayerTest_02;
+    //	ï¿½Ú¶ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    fullLayerTest_02->calForward();
+    //	ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::cout << fullLayerTest_02->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << fullLayerTest_02->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
+  }
+  //ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½Ä·ï¿½ï¿½ò´«²ï¿½
+  void Test::Fullconnect_Layer_Backward_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> InLayer_01 = std::make_shared<Inter_LayerQL<double>>();
+
+    //	ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 2, 3);
+    //	ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> InLayer_02 = InLayer_01 + fullLayer_01;
+    //	ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 3, 5);
+    //	ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> InLayer_03 = InLayer_02 + fullLayer_02;
+    //	ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½LOSS
+    InLayer_03->backward_Matrix = std::make_unique<MatrixQL<double>>(1, 5);
+    InLayer_03->backward_Matrix->setMatrixQL().setConstant(1.0);
 
-	}
-	//²âÊÔÈ«Á¬½Ó²ãµÄÈ¨ÖØ¸üÐÂ£¬ÕâÀïÓÃµÄÊÇSGD£¬Ã¿´ÎÀ´Ò»¸öÐÂÊý¾Ý¸üÐÂÒ»´Î
-	void Test::Fullconnect_Layer_Update_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(1, 5);
-		left_Layer->forward_Matrix->setMatrixQL() << 1, 2, 3, 4, 5;
-
-		std::shared_ptr<LayerQL<double>> fullLayerTest = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 5, 10);
-
-		std::shared_ptr<Inter_LayerQL<double>> right_Layer = left_Layer + fullLayerTest;
-
-		right_Layer->backward_Matrix->setMatrixQL().resize(1, 10);
-		right_Layer->backward_Matrix->setMatrixQL().setConstant(1);
-		
-		fullLayerTest->upMatrix();
+    std::cout << fullLayer_02->right_Layer->backward_Matrix->getMatrixQL() << std::endl;
+    fullLayer_02->calBackward();
+    std::cout << fullLayer_02->left_Layer->backward_Matrix->getMatrixQL() << std::endl;
+
+    int mm = 0;
+  }
+  //ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½È¨ï¿½Ø¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½SGDï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+  void Test::Fullconnect_Layer_Update_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(1, 5);
+    left_Layer->forward_Matrix->setMatrixQL() << 1, 2, 3, 4, 5;
+
+    std::shared_ptr<LayerQL<double>> fullLayerTest = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 5, 10);
+
+    std::shared_ptr<Inter_LayerQL<double>> right_Layer = left_Layer + fullLayerTest;
+
+    right_Layer->backward_Matrix->setMatrixQL().resize(1, 10);
+    right_Layer->backward_Matrix->setMatrixQL().setConstant(1);
 
-	}
-	//²âÊÔÈ«Á¬½Ó²ãµÄÈ¨ÖØ¸üÐÂ£¬ÕâÀïÓÃµÄÊÇMBGD£¬°´ÕÕBATCHÀ´¸üÐÂ
-	void Test::Fullconnect_Layer_Update_Batch_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(3, 5);
-		left_Layer->forward_Matrix->setMatrixQL() << 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11 ,12, 13, 14, 15;
-
-		std::shared_ptr<LayerQL<double>> fullLayerTest = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 5, 10);
-
-		std::shared_ptr<Inter_LayerQL<double>> right_Layer = left_Layer + fullLayerTest;
+    fullLayerTest->upMatrix();
+  }
+  //ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½ï¿½È¨ï¿½Ø¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½MBGDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BATCHï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  void Test::Fullconnect_Layer_Update_Batch_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(3, 5);
+    left_Layer->forward_Matrix->setMatrixQL() << 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15;
+
+    std::shared_ptr<LayerQL<double>> fullLayerTest = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 5, 10);
+
+    std::shared_ptr<Inter_LayerQL<double>> right_Layer = left_Layer + fullLayerTest;
 
-		right_Layer->backward_Matrix->setMatrixQL().resize(3, 10);
-		right_Layer->backward_Matrix->setMatrixQL().setConstant(1);
+    right_Layer->backward_Matrix->setMatrixQL().resize(3, 10);
+    right_Layer->backward_Matrix->setMatrixQL().setConstant(1);
+
+    fullLayerTest->upMatrix_batch(0.35);
+  }
+
+  //============================================================================
+
+  //ï¿½ï¿½ï¿½ï¿½Biasï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+  void Test::Bias_Layer_Forward_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(2, 3);
+    left_Layer->forward_Matrix->setMatrixQL().setConstant(1.2);
+    std::cout << left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+
+    std::shared_ptr<LayerQL<double>> bias_Layer = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 3, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> out_01 = left_Layer + bias_Layer;
+
+    bias_Layer->calForward();
 
-		fullLayerTest->upMatrix_batch(0.35);
-	}
+    std::cout << bias_Layer->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << bias_Layer->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    //*******************************************************************************************************//
 
-	//============================================================================
+    std::shared_ptr<LayerQL<double>> bias_Layer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 3, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> out_02 = out_01 + bias_Layer_02;
+
+    bias_Layer_02->calForward();
 
-	//²âÊÔBias²ãµÄÏòÇ°´«²¥
-	void Test::Bias_Layer_Forward_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(2,3);
-		left_Layer->forward_Matrix->setMatrixQL().setConstant(1.2);
-		std::cout << left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << bias_Layer_02->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << bias_Layer_02->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
 
-		std::shared_ptr<LayerQL<double>> bias_Layer = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 3, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> out_01 = left_Layer + bias_Layer;
+    //*******************************************************************************************************//
 
-		bias_Layer->calForward();
+    std::shared_ptr<LayerQL<double>> bias_Layer_03 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 3, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> out_03 = out_02 + bias_Layer_03;
 
-		std::cout << bias_Layer->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		std::cout << bias_Layer->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		//*******************************************************************************************************//
+    bias_Layer_03->calForward();
 
-		std::shared_ptr<LayerQL<double>> bias_Layer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 3, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> out_02 = out_01 + bias_Layer_02;
+    std::cout << bias_Layer_03->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << bias_Layer_03->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
+  }
+  //ï¿½ï¿½ï¿½ï¿½Biasï¿½ï¿½ï¿½ï¿½ï¿½ó´«²ï¿½
+  void Test::Bias_Layer_Backward_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> InLayer_01 = std::make_shared<Inter_LayerQL<double>>();
+    std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 3, 5, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> InLayer_02 = InLayer_01 + biasLayer_01;
+    biasLayer_01->right_Layer->backward_Matrix->setMatrixQL().resize(3, 5);
+    biasLayer_01->right_Layer->backward_Matrix->setMatrixQL().setOnes();
+    std::cout << biasLayer_01->right_Layer->backward_Matrix->getMatrixQL() << std::endl;
 
-		bias_Layer_02->calForward();
+    biasLayer_01->calBackward();
 
-		std::cout << bias_Layer_02->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		std::cout << bias_Layer_02->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
+    std::cout << biasLayer_01->left_Layer->backward_Matrix->getMatrixQL() << std::endl;
+  }
+  //ï¿½ï¿½ï¿½ï¿½biasï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½SGD
+  void Test::Bias_Layer_Update_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(1, 5);
+    left_Layer->forward_Matrix->setMatrixQL().setConstant(1.2);
 
-		//*******************************************************************************************************//
+    std::shared_ptr<LayerQL<double>> bias_Layer = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 5, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> right_01 = left_Layer + bias_Layer;
 
-		std::shared_ptr<LayerQL<double>> bias_Layer_03 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 3, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> out_03 = out_02 + bias_Layer_03;
+    right_01->backward_Matrix->setMatrixQL().resize(1, 5);
+    right_01->backward_Matrix->setMatrixQL().setConstant(10);
 
-		bias_Layer_03->calForward();
+    bias_Layer->upMatrix();
+  }
+  //ï¿½ï¿½ï¿½ï¿½biasï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½MBGD
+  void Test::Bias_Layer_Update_Batch_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(3, 5);
+    left_Layer->forward_Matrix->setMatrixQL().setConstant(1.2);
 
-		std::cout << bias_Layer_03->left_Layer->forward_Matrix->getMatrixQL() << std::endl;
-		std::cout << bias_Layer_03->right_Layer->forward_Matrix->getMatrixQL() << std::endl;
-
-	}
-	//²âÊÔBias²ãµÄÏòºó´«²¥
-	void Test::Bias_Layer_Backward_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> InLayer_01 = std::make_shared<Inter_LayerQL<double>>();
-		std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer,3, 5, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> InLayer_02 = InLayer_01 + biasLayer_01;
-		biasLayer_01->right_Layer->backward_Matrix->setMatrixQL().resize(3, 5);
-		biasLayer_01->right_Layer->backward_Matrix->setMatrixQL().setOnes();
-		std::cout << biasLayer_01->right_Layer->backward_Matrix->getMatrixQL() << std::endl;
-
-		biasLayer_01->calBackward();
-
-		std::cout << biasLayer_01->left_Layer->backward_Matrix->getMatrixQL() << std::endl;
-
-	}
-	//²âÊÔbias²ãµÄb¸üÐÂ£¬²ÉÓÃSGD
-	void Test::Bias_Layer_Update_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(1, 5);
-		left_Layer->forward_Matrix->setMatrixQL().setConstant(1.2);
-
-		std::shared_ptr<LayerQL<double>> bias_Layer = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 5, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> right_01 = left_Layer + bias_Layer;
-
-		right_01->backward_Matrix->setMatrixQL().resize(1, 5);
-		right_01->backward_Matrix->setMatrixQL().setConstant(10);
-
-		bias_Layer->upMatrix();
-
-	}
-	//²âÊÔbias²ãµÄb¸üÐÂ£¬²ÉÓÃMBGD
-	void Test::Bias_Layer_Update_Batch_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> left_Layer = std::make_shared<Inter_LayerQL<double>>(3, 5);
-		left_Layer->forward_Matrix->setMatrixQL().setConstant(1.2);
-
-		std::shared_ptr<LayerQL<double>> bias_Layer = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 5, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> right_01 = left_Layer + bias_Layer;
-
-		right_01->backward_Matrix->setMatrixQL().resize(3, 5);
-		right_01->backward_Matrix->setMatrixQL().setConstant(10);
-
-		bias_Layer->upMatrix_batch(0.35);
-	}
-
-	//============================================================================
-
-	//²âÊÔSigmoid²ãµÄÇ°Ïò´«²¥
-	void Test::Sigmoid_LayerQL_Forward_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> intputLayer_01 = std::make_shared<Inter_LayerQL<double>>(2,5);
-		intputLayer_01->forward_Matrix->setMatrixQL().setOnes();
-
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inputLayer_02 = intputLayer_01 + sigmoidLayer_01;
-
-		sigmoidLayer_01->calForward();
-
-		std::cout << inputLayer_02->forward_Matrix->getMatrixQL() << std::endl;
-
-	}
-	//²âÊÔSigmoid²ãµÄ·´Ïò´«²¥
-	void Test::Sigmoid_LayerQL_Backward_Test()
-	{
-		std::shared_ptr<Inter_LayerQL<double>> intputLayer_01 = std::make_shared<Inter_LayerQL<double>>();
-
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inputLayer_02 = intputLayer_01 + sigmoidLayer_01;
-
-		inputLayer_02->forward_Matrix->setMatrixQL().resize(2, 5);
-		inputLayer_02->forward_Matrix->setMatrixQL().setConstant(0.5);
-
-		inputLayer_02->backward_Matrix->setMatrixQL().resize(2, 5);
-		inputLayer_02->backward_Matrix->setMatrixQL().setConstant(1);
-		sigmoidLayer_01->calBackward();
-
-		std::cout << intputLayer_01->backward_Matrix->getMatrixQL() << std::endl;
-	}
-
-	//============================================================================
-
-	//²âÊÔ×îÐ¡¶þ³ËËðÊ§º¯Êý
-	void Test::MSE_Loss_LayerQL_Backward_Test()
-	{
-		using inLayer = std::shared_ptr<Inter_LayerQL<double>>;
-		inLayer input_01 = std::make_shared<Inter_LayerQL<double>>(2,5);
-		input_01->forward_Matrix->setMatrixQL().setRandom();
-		std::cout << input_01->forward_Matrix->getMatrixQL() << std::endl;
-
-		std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
-
-		inLayer input_02 = input_01 + lossLayer_01;
-
-		input_02->backward_Matrix->setMatrixQL().resize(2, 5);
-		input_02->backward_Matrix->setMatrixQL().setConstant(1.0);
-		
-		lossLayer_01->calBackward();
-
-		std::cout << input_01->backward_Matrix->getMatrixQL() << std::endl;
-
-	}
-	
-	//============================================================================
-
-	//²âÊÔ²Ù×÷ÔËËã·û
-	void Test::Operator_Test(){}
-
-	//============================================================================
-	
-	void Test::Mnist_Test()
-	{
-		//¼ÓÔØÊý¾Ý
-		LoadCSV::loadCSVTrain();
-		LoadCSV::loadCSVTest();
-
-		//ÖÆ×÷ÊäÈë²ã£¬1ÐÐ784ÁÐ
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(1, 784);
-		//ÖÆ×÷µÚÒ»¸öÈ«Á¬½Ó²ã£¬784ÐÐ100ÁÐ
-		std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 784, 100);
-		//ºÏ²¢Ç°Á½²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_02 = inLayer_01 + fullLayer_01;
-		//ÖÆ×÷µÚÒ»¸öBias²ã£¬1ÐÐ100ÁÐ
-
-		std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 100, 0.1);
-		//ºÏ²¢Ç°Á½²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_03 = inLayer_02 + biasLayer_01;
-
-		//ÖÆ×÷µÚÒ»¸ösigmoid²ã
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		//ºÏ²¢Ç°Á½²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_04 = inLayer_03 + sigmoidLayer_01;
-
-		//ÖÆ×÷µÚ¶þ¸öÈ«Á¬½Ó²ã
-		std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 100, 10);
-		//ºÏ²¢Ç°Á½²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_05 = inLayer_04 + fullLayer_02;
-		//ÖÆ×÷µÚ¶þ¸öBIAS²ã
-		std::shared_ptr<LayerQL<double>> biasLayer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 10, 0.1);
-		//ºÏ²¢Ç°Á½²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_06 = inLayer_05 + biasLayer_02;
-		//ÖÆ×÷µÚ¶þ¸öSIGMOID²ã
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_02 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		//ºÏ²¢Ç°Á½²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_07 = inLayer_06 + sigmoidLayer_02;
-
-		//ÖÆ×÷Loss²ã
-		std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
-		//Êä³ö²ã
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
-
-		//	 ³ÌÐò¼ÓÔØ³õÊ¼Ê±¼ä
-		DWORD load_time = GetTickCount();
-
-		for (int i = 0; i < 2 ; i ++)
-		{
-			for (int j = 0; j < 55000; j++)
-			{
-				//°´´ÎÐò½«Êý¾Ý¼ÓÔØ½øÊäÈë²ã
-				inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer->forward_Matrix->getMatrixQL().row(j);
-				//°´´ÎÐò½«Êý¾Ý¼ÓÔØ½øÊä³ö²ã
-				inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer->backward_Matrix->getMatrixQL().row(j);
-				//´ÓÍ·¿ªÊ¼½øÐÐÇ°Ïò´«²¥
-				for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
-				{
-					(*k)->calForward();
-				}
-				//´ÓÍ·¿ªÊ¼·´Ïò´«²¥ + È¨ÖØ¸üÐÂ
-				for (auto k = NetQL<double>::layerQLVector.rbegin(); k != NetQL<double>::layerQLVector.rend(); k++)
-				{
-					(*k)->calBackward();
-					(*k)->upMatrix();
-				}
-			}
-		}
-
-		//¶ÔÕýÈ·µÄÊý¾Ý½øÐÐ¼ÆÊý
-		double numTotal = 0;
-		//´ÓµÚÒ»¸ö¿ªÊ¼²âÊÔ²âÊÔ¼¯
-		for ( int i = 0; i <10000; i ++ )
-		{
-			//¼ÓÔØÊäÈë²ãºÍÊä³ö²ã
-			inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer_T->forward_Matrix->getMatrixQL().row(i);
-			inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer_T->backward_Matrix->getMatrixQL().row(i);
-			//Ç°Ïò´«²¥£¬¼ÆËã½á¹û
-			for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
-			{
-				(*k)->calForward();
-			}
-			//¼ÆËãµÃµ½µÄ×î´óÖµÎ»ÖÃ
-			int maxRow, maxColumn;
-			lossLayer_01->left_Layer->forward_Matrix->getMatrixQL().maxCoeff(&maxRow, &maxColumn);
-			//LableµÄ×î´óÖµÎ»ÖÃ
-			int maxRow_T, maxColumn_T;
-			lossLayer_01->right_Layer->backward_Matrix->getMatrixQL().maxCoeff(&maxRow_T, &maxColumn_T);
-			//ÅÐ¶ÏÊÇ·ñÏàµÈ£¬ÈôÏàµÈ£¬Ôò+1
-			if (maxColumn == maxColumn_T)
-			{
-				numTotal++;
-			}
-		}
-		//ÕýÈ·ÂÊ
-		std::cout << numTotal / 10000.00 << std::endl;
-
-		//ÑµÁ·ºÍ²âÊÔÔËÐÐÊ±¼ä
-		DWORD star_time = GetTickCount();
-
-		//¼ÆËãÔËÐÐÊ±¼ä
-		std::cout << "Õâ¸ö³ÌÐò¼ÓÔØÊ±¼äÎª£º" << (star_time - load_time) << "ms." << std::endl;
-	}
-
-	void Test::Mnist_Test_02()
-	{
-		//¼ÓÔØÊý¾Ý
-		LoadCSV::loadCSVTrain();
-		LoadCSV::loadCSVTest();
-
-		//µÚÒ»¸ö´ó²ã£¬Ã¿´ÎÑµÁ·100ÐÐ£¬784ÁÐ
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(100, 784);
-		std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 784, 100);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_02 = inLayer_01 + fullLayer_01;
-		std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 100, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_03 = inLayer_02 + biasLayer_01;
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_04 = inLayer_03 + sigmoidLayer_01;
-
-		//µÚ¶þ¸ö´ó²ã£¬Ã¿´ÎÑµÁ·100ÐÐ£¬10ÁÐ
-		std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 100, 10);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_05 = inLayer_04 + fullLayer_02;
-		std::shared_ptr<LayerQL<double>> biasLayer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 10, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_06 = inLayer_05 + biasLayer_02;
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_02 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_07 = inLayer_06 + sigmoidLayer_02;
-
-		//Loss²ãºÍÊä³ö²ã
-		std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
-
-		//³ÌÐò¼ÓÔØ³õÊ¼Ê±¼ä
-		DWORD load_time = GetTickCount();
-
-		//´ÓÍ·¿ªÊ¼±éÀú
-		for (int i = 0; i < 2; i++)
-		{
-			for (int j = 0; j < 550; j++)
-			{
-				//Ã¿´ÎÈ¡100¸öÊý¾Ý¼ÓÔØ
-				inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer->forward_Matrix->getMatrixQL().block(j*100, 0, 100, 784);
-				inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer->backward_Matrix->getMatrixQL().block(j * 100, 0, 100, 10);
-				//Ç°Ïò´«²¥
-				for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
-				{
-					(*k)->calForward();
-				}
-				//·´Ïò´«²¥
-				for (auto k = NetQL<double>::layerQLVector.rbegin(); k != NetQL<double>::layerQLVector.rend(); k++)
-				{
-					(*k)->calBackward();
-					(*k)->upMatrix_batch(0.0035);
-				}
-			}
-		}
-		//²âÊÔÕýÈ·ÂÊ
-		double numTotal = 0;
-		for (int i = 0; i < 10000; i++)
-		{
-			//½øÐÐ²âÊÔ£¬Ã¿´Î²âÊÔÒ»¸ö
-			inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer_T->forward_Matrix->getMatrixQL().row(i);
-			inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer_T->backward_Matrix->getMatrixQL().row(i);
-			//Ç°Ïò´«²¥
-			for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
-			{
-				(*k)->calForward();
-			}
-
-			int maxRow, maxColumn;
-			lossLayer_01->left_Layer->forward_Matrix->getMatrixQL().maxCoeff(&maxRow, &maxColumn);
-
-			int maxRow_T, maxColumn_T;
-			lossLayer_01->right_Layer->backward_Matrix->getMatrixQL().maxCoeff(&maxRow_T, &maxColumn_T);
-			//¼ÆËãÕýÈ·ÂÊ
-			if (maxColumn == maxColumn_T)
-			{
-				numTotal++;
-			}
-		}
-		//¼ÆËãÕýÈ·ÂÊ
-		std::cout << numTotal / 10000.00 << std::endl;
-		//ÑµÁ·ºÍ²âÊÔÔËÐÐÊ±¼ä
-		DWORD star_time = GetTickCount();
-		//¼ÆËãÔËÐÐÊ±¼ä
-		std::cout << "Õâ¸ö³ÌÐò¼ÓÔØÊ±¼äÎª£º" << (star_time - load_time) << "ms." << std::endl;
-	}
-
-	void Test::Mnist_Test_03()
-	{
-		//¼ÓÔØÊý¾Ý
-		LoadCSV::loadCSVTrain();
-		LoadCSV::loadCSVTest();
-		//ÊäÈë²ã 10 ÐÐ 784ÁÐ
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(10, 784);
-		//µÚÒ»´ó²ã
-		std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 784, 100);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_02 = inLayer_01 + fullLayer_01;
-		std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 100, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_03 = inLayer_02 + biasLayer_01;
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_04 = inLayer_03 + sigmoidLayer_01;
-		//µÚ¶þ´ó²ã
-		std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 100, 10);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_05 = inLayer_04 + fullLayer_02;
-		std::shared_ptr<LayerQL<double>> biasLayer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 10, 0.1);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_06 = inLayer_05 + biasLayer_02;
-		std::shared_ptr<LayerQL<double>> sigmoidLayer_02 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_07 = inLayer_06 + sigmoidLayer_02;
-		//Loss²ã
-		std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
-
-		//³ÌÐò¼ÓÔØ³õÊ¼Ê±¼ä
-		DWORD load_time = GetTickCount();
-		//ÑµÁ·¿ªÊ¼
-		for (int i = 0; i < 2; i++)
-		{
-			for (int j = 0; j < 5500; j++)
-			{
-				//Ã¿´ÎÑµÁ·10¸ö
-				inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer->forward_Matrix->getMatrixQL().block(j * 10, 0, 10, 784);
-				inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer->backward_Matrix->getMatrixQL().block(j * 10, 0, 10, 10);
-				//Ç°Ïò´«²¥
-				for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
-				{
-					(*k)->calForward();
-				}
-				//·´Ïò´«²¥
-				for (auto k = NetQL<double>::layerQLVector.rbegin(); k != NetQL<double>::layerQLVector.rend(); k++)
-				{
-					(*k)->calBackward();
-					(*k)->upMatrix_batch(0.35);
-				}
-			}
-		}
-		//¼ÆËãÕýÈ·ÂÊ
-		double numTotal = 0;
-		for (int i = 0; i < 10000; i++)
-		{
-			//²âÊÔ¿ªÊ¼
-			inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer_T->forward_Matrix->getMatrixQL().row(i);
-			inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer_T->backward_Matrix->getMatrixQL().row(i);
-			//Ç°Ïò´«²¥
-			for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
-			{
-				(*k)->calForward();
-			}
-			
-			int maxRow, maxColumn;
-			lossLayer_01->left_Layer->forward_Matrix->getMatrixQL().maxCoeff(&maxRow, &maxColumn);
-
-			int maxRow_T, maxColumn_T;
-			lossLayer_01->right_Layer->backward_Matrix->getMatrixQL().maxCoeff(&maxRow_T, &maxColumn_T);
-			//ÕýÈ·ÂÊ
-			if (maxColumn == maxColumn_T)
-			{
-				numTotal++;
-			}
-		}
-		//¼ÆËãÕýÈ·ÂÊ
-		std::cout << numTotal / 10000.00 << std::endl;
-		//	ÑµÁ·ºÍ²âÊÔÔËÐÐÊ±¼ä
-		DWORD star_time = GetTickCount();
-		//Êä³öÔËÐÐÊ±¼ä
-		std::cout << "Õâ¸ö³ÌÐò¼ÓÔØÊ±¼äÎª£º" << (star_time - load_time) << "ms." << std::endl;
-	}
-
-
-
-	void Test::Mnist_Test_Conv()
-	{
-		//²âÊÔ¼ÓÔØ¾í»ý¶þÎ¬Í¼Ïñ,ÑµÁ·¼¯
-		LoadCSV::loadCSVTrain();
-		LoadCSV::loadCSV_Train_Vector();
-
-		//ÖÆ×÷ÊäÈë²ã£¬1ÐÐ784ÁÐ
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(28, 28);
-
-		for (int i = 0; i < 1; i++)
-		{
-			for (int j = 999; j < 1000; j++)
-			{
-				inLayer_01->forward_Matrix = LoadCSV::conv_Input_Vector[j];
-
-				std::cout << (inLayer_01->forward_Matrix->getMatrixQL()*9).cast<int>() << std::endl;
-			}
-		}
-
-		std::shared_ptr<LayerQL<double>> poolLayer_01 = std::make_shared<PooLayerQL<double>>(Pool_Layer,14,14);
-		//ÕâÀï¿ÉÒÔ³¢ÊÔÖØÔØ¸³ÖµÔËËã·û
-		std::shared_ptr<Inter_LayerQL<double>> out_01 = inLayer_01 + poolLayer_01;
-		poolLayer_01->right_Layer->forward_Matrix->setMatrixQL().resize(14, 14);
-
-		poolLayer_01->calForward();
-
-		std::cout << (out_01->forward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
-
-		//============================================================================================================
-
-		poolLayer_01->left_Layer->backward_Matrix->setMatrixQL().resize(28, 28);
-
-		poolLayer_01->right_Layer->backward_Matrix = poolLayer_01->right_Layer->forward_Matrix;
-
-		poolLayer_01->calBackward();
-
-		std::cout << (inLayer_01->backward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
-
-		//============================================================================================================
-
-		std::cout << "=======================================================================================" << std::endl;
-		//²âÊÔ¼ÓÔØ¾í»ý¶þÎ¬Í¼Ïñ,ÑµÁ·¼¯
-		LoadCSV::loadCSVTest();
-		LoadCSV::loadCSV_Test_Vector();
-
-		//ÖÆ×÷ÊäÈë²ã£¬1ÐÐ784ÁÐ
-		std::shared_ptr<Inter_LayerQL<double>> inLayer_01_T = std::make_shared<Inter_LayerQL<double>>(28, 28);
-
-		for (int i = 0; i < 1; i++)
-		{
-			for (int j = 999; j < 1000; j++)
-			{
-				inLayer_01_T->forward_Matrix = LoadCSV::conv_Input_Vector_T[j];
-
-				std::cout << (inLayer_01_T->forward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
-			}
-		}
-		//===========================================================================================================
-	}
+    std::shared_ptr<LayerQL<double>> bias_Layer = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 5, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> right_01 = left_Layer + bias_Layer;
+
+    right_01->backward_Matrix->setMatrixQL().resize(3, 5);
+    right_01->backward_Matrix->setMatrixQL().setConstant(10);
+
+    bias_Layer->upMatrix_batch(0.35);
+  }
+
+  //============================================================================
+
+  //ï¿½ï¿½ï¿½ï¿½Sigmoidï¿½ï¿½ï¿½Ç°ï¿½ò´«²ï¿½
+  void Test::Sigmoid_LayerQL_Forward_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> intputLayer_01 = std::make_shared<Inter_LayerQL<double>>(2, 5);
+    intputLayer_01->forward_Matrix->setMatrixQL().setOnes();
+
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inputLayer_02 = intputLayer_01 + sigmoidLayer_01;
+
+    sigmoidLayer_01->calForward();
+
+    std::cout << inputLayer_02->forward_Matrix->getMatrixQL() << std::endl;
+  }
+  //ï¿½ï¿½ï¿½ï¿½Sigmoidï¿½ï¿½Ä·ï¿½ï¿½ò´«²ï¿½
+  void Test::Sigmoid_LayerQL_Backward_Test()
+  {
+    std::shared_ptr<Inter_LayerQL<double>> intputLayer_01 = std::make_shared<Inter_LayerQL<double>>();
+
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inputLayer_02 = intputLayer_01 + sigmoidLayer_01;
+
+    inputLayer_02->forward_Matrix->setMatrixQL().resize(2, 5);
+    inputLayer_02->forward_Matrix->setMatrixQL().setConstant(0.5);
+
+    inputLayer_02->backward_Matrix->setMatrixQL().resize(2, 5);
+    inputLayer_02->backward_Matrix->setMatrixQL().setConstant(1);
+    sigmoidLayer_01->calBackward();
+
+    std::cout << intputLayer_01->backward_Matrix->getMatrixQL() << std::endl;
+  }
+
+  //============================================================================
+
+  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½
+  void Test::MSE_Loss_LayerQL_Backward_Test()
+  {
+    using inLayer = std::shared_ptr<Inter_LayerQL<double>>;
+    inLayer input_01 = std::make_shared<Inter_LayerQL<double>>(2, 5);
+    input_01->forward_Matrix->setMatrixQL().setRandom();
+    std::cout << input_01->forward_Matrix->getMatrixQL() << std::endl;
+
+    std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
+
+    inLayer input_02 = input_01 + lossLayer_01;
+
+    input_02->backward_Matrix->setMatrixQL().resize(2, 5);
+    input_02->backward_Matrix->setMatrixQL().setConstant(1.0);
+
+    lossLayer_01->calBackward();
+
+    std::cout << input_01->backward_Matrix->getMatrixQL() << std::endl;
+  }
+
+  //============================================================================
+
+  //ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  void Test::Operator_Test() {}
+
+  //============================================================================
+
+  void Test::Mnist_Test()
+  {
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    LoadCSV::loadCSVTrain();
+    LoadCSV::loadCSVTest();
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬1ï¿½ï¿½784ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(1, 784);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ã£¬784ï¿½ï¿½100ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 784, 100);
+    //ï¿½Ï²ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_02 = inLayer_01 + fullLayer_01;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Biasï¿½ã£¬1ï¿½ï¿½100ï¿½ï¿½
+
+    std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 100, 0.1);
+    //ï¿½Ï²ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_03 = inLayer_02 + biasLayer_01;
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½sigmoidï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    //ï¿½Ï²ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_04 = inLayer_03 + sigmoidLayer_01;
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½Ó²ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 100, 10);
+    //ï¿½Ï²ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_05 = inLayer_04 + fullLayer_02;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½BIASï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> biasLayer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 10, 0.1);
+    //ï¿½Ï²ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_06 = inLayer_05 + biasLayer_02;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½SIGMOIDï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_02 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    //ï¿½Ï²ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_07 = inLayer_06 + sigmoidLayer_02;
+
+    //ï¿½ï¿½ï¿½ï¿½Lossï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
+
+    //	 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½Ê¼Ê±ï¿½ï¿½
+    DWORD load_time = GetTickCount();
+
+    for (int i = 0; i < 2; i++)
+    {
+      for (int j = 0; j < 55000; j++)
+      {
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer->forward_Matrix->getMatrixQL().row(j);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer->backward_Matrix->getMatrixQL().row(j);
+        //ï¿½ï¿½Í·ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ò´«²ï¿½
+        for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
+        {
+          (*k)->calForward();
+        }
+        //ï¿½ï¿½Í·ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ò´«²ï¿½ + È¨ï¿½Ø¸ï¿½ï¿½ï¿½
+        for (auto k = NetQL<double>::layerQLVector.rbegin(); k != NetQL<double>::layerQLVector.rend(); k++)
+        {
+          (*k)->calBackward();
+          (*k)->upMatrix();
+        }
+      }
+    }
+
+    //ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
+    double numTotal = 0;
+    //ï¿½Óµï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ô²ï¿½ï¿½Ô¼ï¿½
+    for (int i = 0; i < 10000; i++)
+    {
+      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer_T->forward_Matrix->getMatrixQL().row(i);
+      inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer_T->backward_Matrix->getMatrixQL().row(i);
+      //Ç°ï¿½ò´«²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
+      {
+        (*k)->calForward();
+      }
+      //ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÎ»ï¿½ï¿½
+      int maxRow, maxColumn;
+      lossLayer_01->left_Layer->forward_Matrix->getMatrixQL().maxCoeff(&maxRow, &maxColumn);
+      //Lableï¿½ï¿½ï¿½ï¿½ï¿½ÖµÎ»ï¿½ï¿½
+      int maxRow_T, maxColumn_T;
+      lossLayer_01->right_Layer->backward_Matrix->getMatrixQL().maxCoeff(&maxRow_T, &maxColumn_T);
+      //ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½+1
+      if (maxColumn == maxColumn_T)
+      {
+        numTotal++;
+      }
+    }
+    //ï¿½ï¿½È·ï¿½ï¿½
+    std::cout << numTotal / 10000.00 << std::endl;
+
+    //Ñµï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    DWORD star_time = GetTickCount();
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½" << (star_time - load_time) << "ms." << std::endl;
+  }
+
+  void Test::Mnist_Test_02()
+  {
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    LoadCSV::loadCSVTrain();
+    LoadCSV::loadCSVTest();
+
+    //ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ã£¬Ã¿ï¿½ï¿½Ñµï¿½ï¿½100ï¿½Ð£ï¿½784ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(100, 784);
+    std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 784, 100);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_02 = inLayer_01 + fullLayer_01;
+    std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 100, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_03 = inLayer_02 + biasLayer_01;
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_04 = inLayer_03 + sigmoidLayer_01;
+
+    //ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬Ã¿ï¿½ï¿½Ñµï¿½ï¿½100ï¿½Ð£ï¿½10ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 100, 10);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_05 = inLayer_04 + fullLayer_02;
+    std::shared_ptr<LayerQL<double>> biasLayer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 10, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_06 = inLayer_05 + biasLayer_02;
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_02 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_07 = inLayer_06 + sigmoidLayer_02;
+
+    //Lossï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½Ê¼Ê±ï¿½ï¿½
+    DWORD load_time = GetTickCount();
+
+    //ï¿½ï¿½Í·ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+    for (int i = 0; i < 2; i++)
+    {
+      for (int j = 0; j < 550; j++)
+      {
+        //Ã¿ï¿½ï¿½È¡100ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½
+        inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer->forward_Matrix->getMatrixQL().block(j * 100, 0, 100, 784);
+        inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer->backward_Matrix->getMatrixQL().block(j * 100, 0, 100, 10);
+        //Ç°ï¿½ò´«²ï¿½
+        for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
+        {
+          (*k)->calForward();
+        }
+        //ï¿½ï¿½ï¿½ò´«²ï¿½
+        for (auto k = NetQL<double>::layerQLVector.rbegin(); k != NetQL<double>::layerQLVector.rend(); k++)
+        {
+          (*k)->calBackward();
+          (*k)->upMatrix_batch(0.0035);
+        }
+      }
+    }
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+    double numTotal = 0;
+    for (int i = 0; i < 10000; i++)
+    {
+      //ï¿½ï¿½ï¿½Ð²ï¿½ï¿½Ô£ï¿½Ã¿ï¿½Î²ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+      inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer_T->forward_Matrix->getMatrixQL().row(i);
+      inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer_T->backward_Matrix->getMatrixQL().row(i);
+      //Ç°ï¿½ò´«²ï¿½
+      for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
+      {
+        (*k)->calForward();
+      }
+
+      int maxRow, maxColumn;
+      lossLayer_01->left_Layer->forward_Matrix->getMatrixQL().maxCoeff(&maxRow, &maxColumn);
+
+      int maxRow_T, maxColumn_T;
+      lossLayer_01->right_Layer->backward_Matrix->getMatrixQL().maxCoeff(&maxRow_T, &maxColumn_T);
+      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+      if (maxColumn == maxColumn_T)
+      {
+        numTotal++;
+      }
+    }
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+    std::cout << numTotal / 10000.00 << std::endl;
+    //Ñµï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    DWORD star_time = GetTickCount();
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½" << (star_time - load_time) << "ms." << std::endl;
+  }
+
+  void Test::Mnist_Test_03()
+  {
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    LoadCSV::loadCSVTrain();
+    LoadCSV::loadCSVTest();
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ 10 ï¿½ï¿½ 784ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(10, 784);
+    //ï¿½ï¿½Ò»ï¿½ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_01 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 784, 100);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_02 = inLayer_01 + fullLayer_01;
+    std::shared_ptr<LayerQL<double>> biasLayer_01 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 100, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_03 = inLayer_02 + biasLayer_01;
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_01 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_04 = inLayer_03 + sigmoidLayer_01;
+    //ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> fullLayer_02 = std::make_shared<Fullconnect_LayerQL<double>>(Fullconnect_Layer, 100, 10);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_05 = inLayer_04 + fullLayer_02;
+    std::shared_ptr<LayerQL<double>> biasLayer_02 = std::make_shared<Bias_LayerQL<double>>(Bias_Layer, 1, 10, 0.1);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_06 = inLayer_05 + biasLayer_02;
+    std::shared_ptr<LayerQL<double>> sigmoidLayer_02 = std::make_shared<Sigmoid_LayerQL<double>>(Sigmoid_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_07 = inLayer_06 + sigmoidLayer_02;
+    //Lossï¿½ï¿½
+    std::shared_ptr<LayerQL<double>> lossLayer_01 = std::make_shared<MSE_Loss_LayerQL<double>>(MSE_Loss_Layer);
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½Ê¼Ê±ï¿½ï¿½
+    DWORD load_time = GetTickCount();
+    //Ñµï¿½ï¿½ï¿½ï¿½Ê¼
+    for (int i = 0; i < 2; i++)
+    {
+      for (int j = 0; j < 5500; j++)
+      {
+        //Ã¿ï¿½ï¿½Ñµï¿½ï¿½10ï¿½ï¿½
+        inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer->forward_Matrix->getMatrixQL().block(j * 10, 0, 10, 784);
+        inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer->backward_Matrix->getMatrixQL().block(j * 10, 0, 10, 10);
+        //Ç°ï¿½ò´«²ï¿½
+        for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
+        {
+          (*k)->calForward();
+        }
+        //ï¿½ï¿½ï¿½ò´«²ï¿½
+        for (auto k = NetQL<double>::layerQLVector.rbegin(); k != NetQL<double>::layerQLVector.rend(); k++)
+        {
+          (*k)->calBackward();
+          (*k)->upMatrix_batch(0.35);
+        }
+      }
+    }
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+    double numTotal = 0;
+    for (int i = 0; i < 10000; i++)
+    {
+      //ï¿½ï¿½ï¿½Ô¿ï¿½Ê¼
+      inLayer_01->forward_Matrix->setMatrixQL() = LoadCSV::input_Layer_T->forward_Matrix->getMatrixQL().row(i);
+      inLayer_08->backward_Matrix->setMatrixQL() = LoadCSV::output_Layer_T->backward_Matrix->getMatrixQL().row(i);
+      //Ç°ï¿½ò´«²ï¿½
+      for (auto k = NetQL<double>::layerQLVector.begin(); k != NetQL<double>::layerQLVector.end(); k++)
+      {
+        (*k)->calForward();
+      }
+
+      int maxRow, maxColumn;
+      lossLayer_01->left_Layer->forward_Matrix->getMatrixQL().maxCoeff(&maxRow, &maxColumn);
+
+      int maxRow_T, maxColumn_T;
+      lossLayer_01->right_Layer->backward_Matrix->getMatrixQL().maxCoeff(&maxRow_T, &maxColumn_T);
+      //ï¿½ï¿½È·ï¿½ï¿½
+      if (maxColumn == maxColumn_T)
+      {
+        numTotal++;
+      }
+    }
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+    std::cout << numTotal / 10000.00 << std::endl;
+    //	Ñµï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    DWORD star_time = GetTickCount();
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½" << (star_time - load_time) << "ms." << std::endl;
+  }
+
+  void Test::Mnist_Test_Conv()
+  {
+    //ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½Î¬Í¼ï¿½ï¿½,Ñµï¿½ï¿½ï¿½ï¿½
+    LoadCSV::loadCSVTrain();
+    LoadCSV::loadCSV_Train_Vector();
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬1ï¿½ï¿½784ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_01 = std::make_shared<Inter_LayerQL<double>>(28, 28);
+
+    for (int i = 0; i < 1; i++)
+    {
+      for (int j = 999; j < 1000; j++)
+      {
+        inLayer_01->forward_Matrix = LoadCSV::conv_Input_Vector[j];
+
+        std::cout << (inLayer_01->forward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
+      }
+    }
+
+    std::shared_ptr<LayerQL<double>> poolLayer_01 = std::make_shared<PooLayerQL<double>>(Pool_Layer, 14, 14);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> out_01 = inLayer_01 + poolLayer_01;
+    poolLayer_01->right_Layer->forward_Matrix->setMatrixQL().resize(14, 14);
+
+    poolLayer_01->calForward();
+
+    std::cout << (out_01->forward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
+
+    //============================================================================================================
+
+    poolLayer_01->left_Layer->backward_Matrix->setMatrixQL().resize(28, 28);
+
+    poolLayer_01->right_Layer->backward_Matrix = poolLayer_01->right_Layer->forward_Matrix;
+
+    poolLayer_01->calBackward();
+
+    std::cout << (inLayer_01->backward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
+
+    //============================================================================================================
+
+    std::cout << "=======================================================================================" << std::endl;
+    //ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½Î¬Í¼ï¿½ï¿½,Ñµï¿½ï¿½ï¿½ï¿½
+    LoadCSV::loadCSVTest();
+    LoadCSV::loadCSV_Test_Vector();
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬1ï¿½ï¿½784ï¿½ï¿½
+    std::shared_ptr<Inter_LayerQL<double>> inLayer_01_T = std::make_shared<Inter_LayerQL<double>>(28, 28);
+
+    for (int i = 0; i < 1; i++)
+    {
+      for (int j = 999; j < 1000; j++)
+      {
+        inLayer_01_T->forward_Matrix = LoadCSV::conv_Input_Vector_T[j];
+
+        std::cout << (inLayer_01_T->forward_Matrix->getMatrixQL() * 9).cast<int>() << std::endl;
+      }
+    }
+    //===========================================================================================================
+  }
 }

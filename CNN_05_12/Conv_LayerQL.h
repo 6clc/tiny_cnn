@@ -4,219 +4,216 @@
 
 namespace tinyDNN
 {
-	template <typename Dtype>
-	class Conv_Kernel
-	{
-	public:
-		Conv_Kernel(int rowNum, int colNum, int kernelWidth, int kernelSize, int paddingSize) : rowNum(rowNum), colNum(colNum), kernelWidth(kernelWidth), kernelSize(kernelSize), paddingSize(paddingSize)
-		{
-			for (int i = 0; i < kernelSize; i++)
-			{
-				std::shared_ptr<MatrixQL<Dtype>> oneSlice_Kernel = std::make_shared<MatrixQL<Dtype>>(kernelWidth, kernelWidth);
-				
-				//²âÊÔ
-				////oneSlice_Kernel->setMatrixQL().setOnes();
-				//double startNum = 0.1 * (i + 1) ;
-				//for ( int p = 0; p < kernelWidth; p++ )
-				//{
-				//	for ( int q = 0; q < kernelWidth; q++ )
-				//	{
-				//		oneSlice_Kernel->setMatrixQL()(p, q) = startNum;
-				//		startNum = startNum + 0.1 * (i + 1);
-				//	}
-				//}
-				
-				////Êµ²Ù
-				//oneSlice_Kernel->setMatrixQL().setRandom();
+  template <typename Dtype>
+  class Conv_Kernel
+  {
+  public:
+    Conv_Kernel(int rowNum, int colNum, int kernelWidth, int kernelSize, int paddingSize) : rowNum(rowNum), colNum(colNum), kernelWidth(kernelWidth), kernelSize(kernelSize), paddingSize(paddingSize)
+    {
+      for (int i = 0; i < kernelSize; i++)
+      {
+        std::shared_ptr<MatrixQL<Dtype>> oneSlice_Kernel = std::make_shared<MatrixQL<Dtype>>(kernelWidth, kernelWidth);
 
-				//Êµ²Ù£¬ ²ÉÓÃ¸ßË¹Ëæ»ú£¬ÕýÌ¬·Ö²¼
-				std::random_device rd;
-				std::mt19937 gen(rd());
-				//Æ½¾ùÖµ1£¬±ê×¼²î 0.1
-				std::normal_distribution<Dtype> normal(0, 0.01);
-				for ( int p = 0; p < kernelWidth; p++ )
-				{
-					for ( int q = 0; q < kernelWidth; q++ )
-					{
-						oneSlice_Kernel->setMatrixQL()(p, q) = normal(gen);
-					}
-				}
+        //ï¿½ï¿½ï¿½ï¿½
+        ////oneSlice_Kernel->setMatrixQL().setOnes();
+        //double startNum = 0.1 * (i + 1) ;
+        //for ( int p = 0; p < kernelWidth; p++ )
+        //{
+        //	for ( int q = 0; q < kernelWidth; q++ )
+        //	{
+        //		oneSlice_Kernel->setMatrixQL()(p, q) = startNum;
+        //		startNum = startNum + 0.1 * (i + 1);
+        //	}
+        //}
 
-				//	Ò»¸ö¾í»ýºËÓÐiÆ¬
-				this->conv_Kernel_Vector.push_back(oneSlice_Kernel);
-			}
-		}
-		//	¶ÔÊäÈëµÄÆ¬¼¯ºÏ½øÐÐÏà³Ë²¢Ïà¼Ó
-		void conv_CalForward(std::vector<std::shared_ptr<MatrixQL<Dtype>>>& inMatrixVector, std::shared_ptr<MatrixQL<Dtype>>& outMatrix)
-		{
+        ////Êµï¿½ï¿½
+        //oneSlice_Kernel->setMatrixQL().setRandom();
 
-			for ( int i = 0; i < kernelSize; i++ )
-			{
-				//std::cout << inMatrixVector[i]->getMatrixQL() << std::endl;
-				//std::cout << conv_Kernel_Vector[i]->getMatrixQL() << std::endl;
+        //Êµï¿½Ù£ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬ï¿½Ö²ï¿½
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        //Æ½ï¿½ï¿½Öµ1ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ 0.1
+        std::normal_distribution<Dtype> normal(0, 0.01);
+        for (int p = 0; p < kernelWidth; p++)
+        {
+          for (int q = 0; q < kernelWidth; q++)
+          {
+            oneSlice_Kernel->setMatrixQL()(p, q) = normal(gen);
+          }
+        }
 
-				////¸üÐÂÔØÈë¾ØÕó
-				std::shared_ptr<MatrixQL<Dtype>> paddingMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum + 2 * paddingSize, colNum + 2 * paddingSize);
-				paddingMatrix->setMatrixQL().setZero();
-				paddingMatrix->setMatrixQL().block( paddingSize, paddingSize, rowNum, colNum) = inMatrixVector[i]->getMatrixQL().block(0, 0, rowNum, colNum);
+        //	Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iÆ¬
+        this->conv_Kernel_Vector.push_back(oneSlice_Kernel);
+      }
+    }
+    //	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½ï¿½
+    void conv_CalForward(std::vector<std::shared_ptr<MatrixQL<Dtype>>> &inMatrixVector, std::shared_ptr<MatrixQL<Dtype>> &outMatrix)
+    {
 
-				//¶ÔÃ¿Ò»¸ö¾í»ýºË½øÐÐ¼ÆËã
-				outMatrix->setMatrixQL() = outMatrix->getMatrixQL() + conv_Matrix( paddingMatrix, conv_Kernel_Vector[i] )->getMatrixQL();
-			}
-		}
-		//¶ÔÃ¿Ò»ÕÅÍ¼½øÐÐ¾í»ý¼ÆËã
-		std::shared_ptr<MatrixQL<Dtype>> conv_Matrix( std::shared_ptr<MatrixQL<Dtype>>& inMatrixPtr, std::shared_ptr<MatrixQL<Dtype>>& convMatrixPtr )
-		{
-			std::shared_ptr<MatrixQL<Dtype>> reMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum,colNum);
-			for ( int i = 0; i < rowNum; i++ )
-			{
-				for ( int j = 0; j < colNum; j++ )
-				{
-					reMatrix->setMatrixQL()(i, j) = (inMatrixPtr->getMatrixQL().block(i, j, kernelWidth, kernelWidth).array() * convMatrixPtr->getMatrixQL().array()).sum();
-				}
-			}
-			return reMatrix;
-		}
-		
-	public:
-		std::vector<std::shared_ptr<MatrixQL<Dtype>>> conv_Kernel_Vector;
+      for (int i = 0; i < kernelSize; i++)
+      {
+        //std::cout << inMatrixVector[i]->getMatrixQL() << std::endl;
+        //std::cout << conv_Kernel_Vector[i]->getMatrixQL() << std::endl;
 
-		//´«Èë¾ØÕóµÄÐÐºÍÁÐ
-		int rowNum;
-		int colNum;
-		//¾í»ýºËµÄ¿í¶È
-		int kernelWidth;
-		//¾í»ýºËµÄÆ¬Êý
-		int kernelSize;
-		//¾í»ýºËµÄÀ©³ä
-		int paddingSize;
-	};
+        ////ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        std::shared_ptr<MatrixQL<Dtype>> paddingMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum + 2 * paddingSize, colNum + 2 * paddingSize);
+        paddingMatrix->setMatrixQL().setZero();
+        paddingMatrix->setMatrixQL().block(paddingSize, paddingSize, rowNum, colNum) = inMatrixVector[i]->getMatrixQL().block(0, 0, rowNum, colNum);
 
+        //ï¿½ï¿½Ã¿Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½
+        outMatrix->setMatrixQL() = outMatrix->getMatrixQL() + conv_Matrix(paddingMatrix, conv_Kernel_Vector[i])->getMatrixQL();
+      }
+    }
+    //ï¿½ï¿½Ã¿Ò»ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    std::shared_ptr<MatrixQL<Dtype>> conv_Matrix(std::shared_ptr<MatrixQL<Dtype>> &inMatrixPtr, std::shared_ptr<MatrixQL<Dtype>> &convMatrixPtr)
+    {
+      std::shared_ptr<MatrixQL<Dtype>> reMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
+      for (int i = 0; i < rowNum; i++)
+      {
+        for (int j = 0; j < colNum; j++)
+        {
+          reMatrix->setMatrixQL()(i, j) = (inMatrixPtr->getMatrixQL().block(i, j, kernelWidth, kernelWidth).array() * convMatrixPtr->getMatrixQL().array()).sum();
+        }
+      }
+      return reMatrix;
+    }
 
-	//=======================================================================================================================
+  public:
+    std::vector<std::shared_ptr<MatrixQL<Dtype>>> conv_Kernel_Vector;
 
-	template <typename Dtype> 
-	class Conv_LayerQL : public LayerQL<Dtype>
-	{
-	public:
-		//							ÀàÐÍ			¾í»ýºËÊý			ÐÐÊý			ÁÐÊý				¾í»ýºË¿í¶È		¾í»ýºË¼¸Æ¬		À©³ä¿í¶È	
-		Conv_LayerQL(LayerType type, int kernelNum, int rowNum, int colNum, int kernelWidth, int kernelSize, int paddingSize ) : LayerQL(type), kernelNum(kernelNum), rowNum(rowNum), colNum(colNum), kernelWidth(kernelWidth), kernelSize(kernelSize), paddingSize(paddingSize)
-		{
-			std::cout << "Conv_LayerQL Start!" << std::endl;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½
+    int rowNum;
+    int colNum;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄ¿ï¿½ï¿½ï¿½
+    int kernelWidth;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½Æ¬ï¿½ï¿½
+    int kernelSize;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½
+    int paddingSize;
+  };
 
-			for ( int i = 0; i < kernelNum; i++ )
-			{
-				std::shared_ptr<Conv_Kernel<Dtype>> oneKernel = std::make_shared<Conv_Kernel<Dtype>>(rowNum, colNum, kernelWidth, kernelSize, paddingSize);
+  //=======================================================================================================================
 
-				this->conv_Kernel_Vector.push_back( oneKernel );
-			}
-		}
+  template <typename Dtype>
+  class Conv_LayerQL : public LayerQL<Dtype>
+  {
+  public:
+    //							ï¿½ï¿½ï¿½ï¿½			ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½			ï¿½ï¿½ï¿½ï¿½			ï¿½ï¿½ï¿½ï¿½				ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½ï¿½ï¿½		ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½Æ¬		ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    Conv_LayerQL(LayerType type, int kernelNum, int rowNum, int colNum, int kernelWidth, int kernelSize, int paddingSize) : LayerQL(type), kernelNum(kernelNum), rowNum(rowNum), colNum(colNum), kernelWidth(kernelWidth), kernelSize(kernelSize), paddingSize(paddingSize)
+    {
+      std::cout << "Conv_LayerQL Start!" << std::endl;
 
-		~Conv_LayerQL() override final
-		{
-			std::cout << "Conv_LayerQL Over!" << std::endl;
-		}
+      for (int i = 0; i < kernelNum; i++)
+      {
+        std::shared_ptr<Conv_Kernel<Dtype>> oneKernel = std::make_shared<Conv_Kernel<Dtype>>(rowNum, colNum, kernelWidth, kernelSize, paddingSize);
 
-		void calForward(int type = 0) const override final
-		{
-			//Ã¿´ÎÏòÇ°´«²¥ÏÈÇåÀíµô¼¯ºÏÖÐµÄÄÚÈÝÔÙÖØÐÂ²åÈë
-			this->right_Layer->forward_Matrix_Vector.clear();
+        this->conv_Kernel_Vector.push_back(oneKernel);
+      }
+    }
 
-			for ( int i = 0; i < kernelNum; i++ )
-			{
-				std::shared_ptr<MatrixQL<Dtype>> outMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
-				outMatrix->setMatrixQL().setZero();
+    ~Conv_LayerQL() override final
+    {
+      std::cout << "Conv_LayerQL Over!" << std::endl;
+    }
 
-				this->conv_Kernel_Vector[i]->conv_CalForward( this->left_Layer->forward_Matrix_Vector, outMatrix );
-				this->right_Layer->forward_Matrix_Vector.push_back( outMatrix );
-			}
-		}
+    void calForward(int type = 0) const override final
+    {
+      //Ã¿ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½
+      this->right_Layer->forward_Matrix_Vector.clear();
 
-		void calBackward(int type = 0) override final
-		{
-			this->left_Layer->backward_Matrix_Vector.clear();
+      for (int i = 0; i < kernelNum; i++)
+      {
+        std::shared_ptr<MatrixQL<Dtype>> outMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
+        outMatrix->setMatrixQL().setZero();
 
-			for ( int i = 0; i < kernelSize; i++ )
-			{
-				std::shared_ptr<MatrixQL<Dtype>> matrix_Left = std::make_shared<MatrixQL<Dtype>>( rowNum, colNum );
-				matrix_Left->setMatrixQL().setZero();
-				this->left_Layer->backward_Matrix_Vector.push_back(matrix_Left);
-			}
+        this->conv_Kernel_Vector[i]->conv_CalForward(this->left_Layer->forward_Matrix_Vector, outMatrix);
+        this->right_Layer->forward_Matrix_Vector.push_back(outMatrix);
+      }
+    }
 
-			for ( int i = 0; i < kernelNum; i++ )
-			{
-				std::shared_ptr<MatrixQL<Dtype>> paddingMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum + 2 * paddingSize, colNum + 2 * paddingSize);
-				paddingMatrix->setMatrixQL().setZero();
-				paddingMatrix->setMatrixQL().block(paddingSize, paddingSize, rowNum, colNum) = this->right_Layer->backward_Matrix_Vector[i]->getMatrixQL().block(0, 0, rowNum, colNum);
+    void calBackward(int type = 0) override final
+    {
+      this->left_Layer->backward_Matrix_Vector.clear();
 
-				for ( int j = 0 ; j < kernelSize; j++ )
-				{
-					std::shared_ptr<MatrixQL<Dtype>> reMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
-					for (int p = 0; p < rowNum; p++)
-					{
-						for (int q = 0; q < colNum; q++)
-						{
-							reMatrix->setMatrixQL()(p, q) = (paddingMatrix->getMatrixQL().block(p, q, kernelWidth, kernelWidth).array() * conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL().reverse().array()).sum();
-						}
-					}
-					this->left_Layer->backward_Matrix_Vector[j]->setMatrixQL() = this->left_Layer->backward_Matrix_Vector[j]->getMatrixQL() + reMatrix->getMatrixQL();
-				}
-			}
-		};
+      for (int i = 0; i < kernelSize; i++)
+      {
+        std::shared_ptr<MatrixQL<Dtype>> matrix_Left = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
+        matrix_Left->setMatrixQL().setZero();
+        this->left_Layer->backward_Matrix_Vector.push_back(matrix_Left);
+      }
 
-		void upMatrix() override final 
-		{
-			for ( int i = 0 ; i < kernelNum; i++ )
-			{
-				for ( int j = 0 ; j < kernelSize; j++ )
-				{
-					std::shared_ptr<MatrixQL<Dtype>> paddingMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum + 2 * paddingSize, colNum + 2 * paddingSize);
-					paddingMatrix->setMatrixQL().setZero();
-					paddingMatrix->setMatrixQL().block(paddingSize, paddingSize, rowNum, colNum) = this->left_Layer->forward_Matrix_Vector[j]->getMatrixQL().block(0, 0, rowNum, colNum);
+      for (int i = 0; i < kernelNum; i++)
+      {
+        std::shared_ptr<MatrixQL<Dtype>> paddingMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum + 2 * paddingSize, colNum + 2 * paddingSize);
+        paddingMatrix->setMatrixQL().setZero();
+        paddingMatrix->setMatrixQL().block(paddingSize, paddingSize, rowNum, colNum) = this->right_Layer->backward_Matrix_Vector[i]->getMatrixQL().block(0, 0, rowNum, colNum);
 
-					std::shared_ptr<MatrixQL<Dtype>> upMatrix = std::make_shared<MatrixQL<Dtype>>( kernelWidth, kernelWidth );
-					for (int p = 0; p < kernelWidth; p++)
-					{
-						for (int q = 0; q < kernelWidth; q++)
-						{
-							upMatrix->setMatrixQL()(p, q) = (paddingMatrix->getMatrixQL().block(p, q, rowNum, colNum).array() *
-								this->right_Layer->backward_Matrix_Vector[i]->getMatrixQL().array()).sum();
-						}
-					}
+        for (int j = 0; j < kernelSize; j++)
+        {
+          std::shared_ptr<MatrixQL<Dtype>> reMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum, colNum);
+          for (int p = 0; p < rowNum; p++)
+          {
+            for (int q = 0; q < colNum; q++)
+            {
+              reMatrix->setMatrixQL()(p, q) = (paddingMatrix->getMatrixQL().block(p, q, kernelWidth, kernelWidth).array() * conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL().reverse().array()).sum();
+            }
+          }
+          this->left_Layer->backward_Matrix_Vector[j]->setMatrixQL() = this->left_Layer->backward_Matrix_Vector[j]->getMatrixQL() + reMatrix->getMatrixQL();
+        }
+      }
+    };
 
-					//std::cout << "UPÖµ++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
-					//std::cout << upMatrix->getMatrixQL() << std::endl;
-					//std::cout << "¼õÖ®Ç°++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
-					//std::cout << this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() << std::endl;
+    void upMatrix() override final
+    {
+      for (int i = 0; i < kernelNum; i++)
+      {
+        for (int j = 0; j < kernelSize; j++)
+        {
+          std::shared_ptr<MatrixQL<Dtype>> paddingMatrix = std::make_shared<MatrixQL<Dtype>>(rowNum + 2 * paddingSize, colNum + 2 * paddingSize);
+          paddingMatrix->setMatrixQL().setZero();
+          paddingMatrix->setMatrixQL().block(paddingSize, paddingSize, rowNum, colNum) = this->left_Layer->forward_Matrix_Vector[j]->getMatrixQL().block(0, 0, rowNum, colNum);
 
-					//*********************************************
-					//this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->setMatrixQL() = this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() - 0.5 * upMatrix->getMatrixQL();
+          std::shared_ptr<MatrixQL<Dtype>> upMatrix = std::make_shared<MatrixQL<Dtype>>(kernelWidth, kernelWidth);
+          for (int p = 0; p < kernelWidth; p++)
+          {
+            for (int q = 0; q < kernelWidth; q++)
+            {
+              upMatrix->setMatrixQL()(p, q) = (paddingMatrix->getMatrixQL().block(p, q, rowNum, colNum).array() *
+                                               this->right_Layer->backward_Matrix_Vector[i]->getMatrixQL().array())
+                                                  .sum();
+            }
+          }
 
-					this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->setMatrixQL() = this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() - this->upConv * upMatrix->getMatrixQL();
-					//*********************************************
+          //std::cout << "UPÖµ++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+          //std::cout << upMatrix->getMatrixQL() << std::endl;
+          //std::cout << "ï¿½ï¿½Ö®Ç°++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+          //std::cout << this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() << std::endl;
 
-					//std::cout << "¼õÖ®ºó++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
-					//std::cout << this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() << std::endl;
+          //*********************************************
+          //this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->setMatrixQL() = this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() - 0.5 * upMatrix->getMatrixQL();
 
-				}
+          this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->setMatrixQL() = this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() - this->upConv * upMatrix->getMatrixQL();
+          //*********************************************
 
-			}
-		
-		};
-		void upMatrix_batch(Dtype upRate) override final {};
+          //std::cout << "ï¿½ï¿½Ö®ï¿½ï¿½++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+          //std::cout << this->conv_Kernel_Vector[i]->conv_Kernel_Vector[j]->getMatrixQL() << std::endl;
+        }
+      }
+    };
+    void upMatrix_batch(Dtype upRate) override final{};
 
-	public:
-		std::vector<std::shared_ptr<Conv_Kernel<Dtype>>> conv_Kernel_Vector;
-		//¾í»ýºËµÄ¸öÊý
-		int kernelNum;
-		//´«Èë¾ØÕóµÄÐÐºÍÁÐ
-		int rowNum;
-		int colNum;
-		//¾í»ýºËµÄ¿í¶È
-		int kernelWidth;
-		//¾í»ýºËµÄÆ¬Êý
-		int kernelSize;
-		//À©³ä´óÐ¡
-		int paddingSize;
-	};
+  public:
+    std::vector<std::shared_ptr<Conv_Kernel<Dtype>>> conv_Kernel_Vector;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄ¸ï¿½ï¿½ï¿½
+    int kernelNum;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½
+    int rowNum;
+    int colNum;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄ¿ï¿½ï¿½ï¿½
+    int kernelWidth;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½Æ¬ï¿½ï¿½
+    int kernelSize;
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+    int paddingSize;
+  };
 }

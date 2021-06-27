@@ -16,46 +16,42 @@
 
 namespace tinyDNN
 {
-	class Test
-	{
-	public:
-		Test();
-		~Test();
+  class Test
+  {
+  public:
+    Test();
+    ~Test();
 
-		void Fullconnect_Layer_Forward_Test();
-		
-		void Fullconnect_Layer_Backward_Test();
+    void Fullconnect_Layer_Forward_Test();
 
-		void Fullconnect_Layer_Update_Test();
+    void Fullconnect_Layer_Backward_Test();
 
-		void Fullconnect_Layer_Update_Batch_Test();
+    void Fullconnect_Layer_Update_Test();
 
-		
-		void Bias_Layer_Forward_Test();
+    void Fullconnect_Layer_Update_Batch_Test();
 
-		void Bias_Layer_Backward_Test();
+    void Bias_Layer_Forward_Test();
 
-		void Bias_Layer_Update_Test();
+    void Bias_Layer_Backward_Test();
 
-		void Bias_Layer_Update_Batch_Test();
+    void Bias_Layer_Update_Test();
 
+    void Bias_Layer_Update_Batch_Test();
 
-		void Sigmoid_LayerQL_Forward_Test();
+    void Sigmoid_LayerQL_Forward_Test();
 
-		void Sigmoid_LayerQL_Backward_Test();
+    void Sigmoid_LayerQL_Backward_Test();
 
-		void MSE_Loss_LayerQL_Backward_Test();
+    void MSE_Loss_LayerQL_Backward_Test();
 
-		void Operator_Test();
+    void Operator_Test();
 
+    void Mnist_Test();
 
-		void Mnist_Test();
+    void Mnist_Test_02();
 
-		void Mnist_Test_02();
+    void Mnist_Test_03();
 
-		void Mnist_Test_03();
-
-		
-		void Mnist_Test_Conv();
-	};
+    void Mnist_Test_Conv();
+  };
 }

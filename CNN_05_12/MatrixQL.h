@@ -1,65 +1,47 @@
 #pragma once
 #include <Eigen/Core>
-#include<cmath>
+#include <cmath>
 
-namespace tinyDNN {
+namespace tinyDNN
+{
+  template <typename Dtype>
+  using MatrixData = typename Eigen::Matrix<Dtype, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
-	//	定义底层Eigen矩阵模板
-	template <typename Dtype>
-	using MatrixData = typename Eigen::Matrix <Dtype, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  template <typename Dtype>
+  class MatrixQL{
+    public :
+      MatrixQL(int rowNum, int colNum);
+      ~MatrixQL();
 
-	template <typename Dtype>
-	class MatrixQL
-	{
-		//	定义底层Eigen矩阵模板
-		//using MatrixData = Eigen::Matrix <Dtype, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-	public:
-		//	MatrixQL() = default;
-		//	显式调用模板构造函数
-		MatrixQL(int rowNum, int colNum);
-		//	析构函数
-		~MatrixQL();
+      const MatrixData<Dtype> &getMatrixQL() const;
+      MatrixData<Dtype> &setMatrixQL();
 
-		const MatrixData<Dtype>& getMatrixQL() const;
-		MatrixData<Dtype>& setMatrixQL();
+    private:
+      MatrixData<Dtype> matrixData;
+      int rowNum;
+      int colNum;
+  };
 
-	private:
-		//	声明底层矩阵
-		MatrixData<Dtype> matrixData;
-		//	矩阵行数
-		int rowNum;
-		//	矩阵列数
-		int colNum;
-	};
+template <typename Dtype>
+MatrixQL<Dtype>::MatrixQL(int rowNum, int colNum) : rowNum(rowNum), colNum(colNum)
+{
+  this->matrixData.resize(this->rowNum, this->colNum);
+}
 
-	//	模板构造函数
-	template <typename Dtype>
-	MatrixQL<Dtype>::MatrixQL(int rowNum, int colNum) : rowNum(rowNum), colNum(colNum)
-	{
-		//std::cout << "Matrix Start!" << std::endl;
-		
-		//	将声明的底层库重新设置大小
-		this->matrixData.resize(this->rowNum, this->colNum);
-	}
+template <typename Dtype>
+MatrixQL<Dtype>::~MatrixQL()
+{
+}
 
-	//	模板析构函数
-	template <typename Dtype>
-	MatrixQL<Dtype>::~MatrixQL()
-	{
-		//std::cout << "Matrix Over!" << std::endl;
-	}
+template <typename Dtype>
+inline const MatrixData<Dtype> &MatrixQL<Dtype>::getMatrixQL() const
+{
+  return this->matrixData;
+}
 
-	//	取出底层数据库
-	//	注意：这里返回模板类内定义类型的时候，需要加typeName
-	template <typename Dtype>
-	inline const typename /*MatrixQL<Dtype>::*/MatrixData<Dtype>& MatrixQL<Dtype>::getMatrixQL() const
-	{
-		return this->matrixData;
-	}
-
-	template <typename Dtype>
-	inline typename /*MatrixQL<Dtype>::*/MatrixData<Dtype>& MatrixQL<Dtype>::setMatrixQL()
-	{
-		return this->matrixData;
-	}
+template <typename Dtype>
+inline MatrixData<Dtype> &MatrixQL<Dtype>::setMatrixQL()
+{
+  return this->matrixData;
+}
 }

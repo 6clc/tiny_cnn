@@ -11,133 +11,130 @@
 
 namespace tinyDNN
 {
-	class Conv_Test
-	{
-	public:
-		Conv_Test()
-		{
-			//this->conv_One_Kernel_Test();
-			this->conv_Kernel_Test();
-		}
-		~Conv_Test(){}
+  class Conv_Test
+  {
+  public:
+    Conv_Test()
+    {
+      //this->conv_One_Kernel_Test();
+      this->conv_Kernel_Test();
+    }
+    ~Conv_Test() {}
 
-		void conv_One_Kernel_Test()
-		{
-			//	ÅäÖÃÀàĞÍÊäÈë²ã£¬ 10 * 10 £¬ È»ºóÊÇ3²ã £¬ ½« 3 ²ãÖÃÈë Vector
-			std::vector<std::shared_ptr<MatrixQL<double>>> inMatrixVector;
-			std::shared_ptr<MatrixQL<double>> test_01 = std::make_shared<MatrixQL<double>>(10,10);
-			test_01->setMatrixQL().setOnes();
-			//test_01->setMatrixQL().setRandom();
-			std::shared_ptr<MatrixQL<double>> test_02 = std::make_shared<MatrixQL<double>>(10,10);
-			test_02->setMatrixQL().setOnes();
-			//test_02->setMatrixQL().setRandom();
-			std::shared_ptr<MatrixQL<double>> test_03 = std::make_shared<MatrixQL<double>>(10,10);
-			test_03->setMatrixQL().setOnes();
-			//test_03->setMatrixQL().setRandom();
+    void conv_One_Kernel_Test()
+    {
+      //	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ 10 * 10 ï¿½ï¿½ È»ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ 3 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Vector
+      std::vector<std::shared_ptr<MatrixQL<double>>> inMatrixVector;
+      std::shared_ptr<MatrixQL<double>> test_01 = std::make_shared<MatrixQL<double>>(10, 10);
+      test_01->setMatrixQL().setOnes();
+      //test_01->setMatrixQL().setRandom();
+      std::shared_ptr<MatrixQL<double>> test_02 = std::make_shared<MatrixQL<double>>(10, 10);
+      test_02->setMatrixQL().setOnes();
+      //test_02->setMatrixQL().setRandom();
+      std::shared_ptr<MatrixQL<double>> test_03 = std::make_shared<MatrixQL<double>>(10, 10);
+      test_03->setMatrixQL().setOnes();
+      //test_03->setMatrixQL().setRandom();
 
-			inMatrixVector.push_back(test_01);
-			inMatrixVector.push_back(test_02);
-			inMatrixVector.push_back(test_03);
+      inMatrixVector.push_back(test_01);
+      inMatrixVector.push_back(test_02);
+      inMatrixVector.push_back(test_03);
 
-			//	ÅäÖÃÊä³ö²ã£¬	6*6	£¬ Ò»²ã
-			std::shared_ptr<MatrixQL<double>> outMatrix = std::make_shared<MatrixQL<double>>(10,10);
-			outMatrix->setMatrixQL().setZero();
+      //	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬	6*6	ï¿½ï¿½ Ò»ï¿½ï¿½
+      std::shared_ptr<MatrixQL<double>> outMatrix = std::make_shared<MatrixQL<double>>(10, 10);
+      outMatrix->setMatrixQL().setZero();
 
-			//	ÉèÖÃ¾í»ıºË£¬ ½«¾í»ıºË
-			Conv_Kernel<double> conv_Test(10,10,5,3,2);
+      //	ï¿½ï¿½ï¿½Ã¾ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      Conv_Kernel<double> conv_Test(10, 10, 5, 3, 2);
 
-			conv_Test.conv_CalForward( inMatrixVector, outMatrix );
+      conv_Test.conv_CalForward(inMatrixVector, outMatrix);
 
-			//***********************************************************************************//
-			std::cout << outMatrix->getMatrixQL() << std::endl;
-			
-		}
+      //***********************************************************************************//
+      std::cout << outMatrix->getMatrixQL() << std::endl;
+    }
 
-		void conv_Kernel_Test()
-		{
-			std::shared_ptr<Inter_LayerQL<double>> inMatrixVector = std::make_shared<Inter_LayerQL<double>>( 3, 3 );
+    void conv_Kernel_Test()
+    {
+      std::shared_ptr<Inter_LayerQL<double>> inMatrixVector = std::make_shared<Inter_LayerQL<double>>(3, 3);
 
-			std::shared_ptr<MatrixQL<double>> test_01 = std::make_shared<MatrixQL<double>>(3, 3);
-			test_01->setMatrixQL().setConstant(0.1);
-			//test_01->setMatrixQL().setRandom();
+      std::shared_ptr<MatrixQL<double>> test_01 = std::make_shared<MatrixQL<double>>(3, 3);
+      test_01->setMatrixQL().setConstant(0.1);
+      //test_01->setMatrixQL().setRandom();
 
-			std::shared_ptr<MatrixQL<double>> test_02 = std::make_shared<MatrixQL<double>>(3, 3);
-			test_02->setMatrixQL().setConstant(0.2);
-			//test_02->setMatrixQL().setRandom();
+      std::shared_ptr<MatrixQL<double>> test_02 = std::make_shared<MatrixQL<double>>(3, 3);
+      test_02->setMatrixQL().setConstant(0.2);
+      //test_02->setMatrixQL().setRandom();
 
-			//std::shared_ptr<MatrixQL<double>> test_03 = std::make_shared<MatrixQL<double>>(3, 3);
-			//test_03->setMatrixQL().setConstant(0.3);
-			////test_03->setMatrixQL().setRandom();
+      //std::shared_ptr<MatrixQL<double>> test_03 = std::make_shared<MatrixQL<double>>(3, 3);
+      //test_03->setMatrixQL().setConstant(0.3);
+      ////test_03->setMatrixQL().setRandom();
 
-			inMatrixVector->forward_Matrix_Vector.push_back( test_01 );
-			inMatrixVector->forward_Matrix_Vector.push_back( test_02 );
-			//inMatrixVector->forward_Matrix_Vector.push_back( test_03 );
+      inMatrixVector->forward_Matrix_Vector.push_back(test_01);
+      inMatrixVector->forward_Matrix_Vector.push_back(test_02);
+      //inMatrixVector->forward_Matrix_Vector.push_back( test_03 );
 
+      //std::shared_ptr<LayerQL<double>> paddingMatrix = std::make_shared<Padding_LayerQL<double>>(Padding_Layer,10,10,2);
 
-			//std::shared_ptr<LayerQL<double>> paddingMatrix = std::make_shared<Padding_LayerQL<double>>(Padding_Layer,10,10,2);
+      //std::shared_ptr<Inter_LayerQL<double>> outMatrix_01 = inMatrixVector + paddingMatrix;
 
-			//std::shared_ptr<Inter_LayerQL<double>> outMatrix_01 = inMatrixVector + paddingMatrix;
+      std::shared_ptr<LayerQL<double>> conv_Kerel_Test = std::make_shared<Conv_LayerQL<double>>(Conv_Layer, 2, 3, 3, 3, 2, 1);
 
-			std::shared_ptr<LayerQL<double>> conv_Kerel_Test = std::make_shared<Conv_LayerQL<double>>(Conv_Layer, 2, 3, 3, 3, 2, 1);
+      std::shared_ptr<Inter_LayerQL<double>> outMatrix = inMatrixVector + conv_Kerel_Test;
 
-			std::shared_ptr<Inter_LayerQL<double>> outMatrix = inMatrixVector + conv_Kerel_Test;
+      //paddingMatrix->calForward();
 
-			//paddingMatrix->calForward();
+      conv_Kerel_Test->calForward();
 
-			conv_Kerel_Test->calForward();
+      //********************************************************************************************************//
+      //ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ò´«²ï¿½
+      int stepNum = 3;
 
-			//********************************************************************************************************//
-			//²âÊÔÇ°Ïò´«²¥
-			int stepNum = 3;
+      while (stepNum > 0)
+      {
+        std::cout << "Ç°ï¿½ò´«²ï¿½**************************************************************" << std::endl;
+        conv_Kerel_Test->calForward();
+        for (auto i = outMatrix->forward_Matrix_Vector.begin(); i != outMatrix->forward_Matrix_Vector.end(); i++)
+        {
+          std::cout << (*i)->getMatrixQL() << std::endl;
+        }
+        stepNum--;
+      }
 
-			while ( stepNum >0 )
-			{
-				std::cout << "Ç°Ïò´«²¥**************************************************************" << std::endl;
-				conv_Kerel_Test->calForward();
-				for (auto i = outMatrix->forward_Matrix_Vector.begin(); i != outMatrix->forward_Matrix_Vector.end(); i++)
-				{
-					std::cout << (*i)->getMatrixQL() << std::endl;
+      //*******************************************************************************************************
+      //ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ò´«²ï¿½
+      std::shared_ptr<MatrixQL<double>> test_03 = std::make_shared<MatrixQL<double>>(3, 3);
+      test_03->setMatrixQL().setConstant(0.1);
 
-				}
-				stepNum--;
-			}
+      std::shared_ptr<MatrixQL<double>> test_04 = std::make_shared<MatrixQL<double>>(3, 3);
+      test_04->setMatrixQL().setConstant(0.2);
 
-			//*******************************************************************************************************
-			//²âÊÔ·´Ïò´«²¥
-			std::shared_ptr<MatrixQL<double>> test_03 = std::make_shared<MatrixQL<double>>(3, 3);
-			test_03->setMatrixQL().setConstant(0.1);
+      outMatrix->backward_Matrix_Vector.push_back(test_03);
+      outMatrix->backward_Matrix_Vector.push_back(test_04);
 
-			std::shared_ptr<MatrixQL<double>> test_04 = std::make_shared<MatrixQL<double>>(3, 3);
-			test_04->setMatrixQL().setConstant(0.2);
+      conv_Kerel_Test->calBackward();
 
+      int stepNum_02 = 3;
 
-			outMatrix->backward_Matrix_Vector.push_back(test_03);
-			outMatrix->backward_Matrix_Vector.push_back(test_04);
+      while (stepNum_02 > 0)
+      {
+        std::cout << "ï¿½ï¿½ï¿½ò´«²ï¿½*****************************************************************************" << std::endl;
+        for (auto i = inMatrixVector->backward_Matrix_Vector.begin(); i != inMatrixVector->backward_Matrix_Vector.end(); i++)
+        {
+          std::cout << (*i)->getMatrixQL() << std::endl;
+        }
+        stepNum_02--;
+      }
 
-			conv_Kerel_Test->calBackward();
+      //*******************************************************************************************************
+      //ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ø¸ï¿½ï¿½ï¿½
+      
 
-			int stepNum_02 = 3;
+      int stepNum_03 = 3;
 
-			while (stepNum_02 > 0)
-			{
-				std::cout << "·´Ïò´«²¥*****************************************************************************" << std::endl;
-				for (auto i = inMatrixVector->backward_Matrix_Vector.begin(); i != inMatrixVector->backward_Matrix_Vector.end(); i++)
-				{
-					std::cout << (*i)->getMatrixQL() << std::endl;
-				}
-				stepNum_02--;
-			}
-			
-			//*******************************************************************************************************
-			//²âÊÔÈ¨ÖØ¸üĞÂ
-
-			int stepNum_03 = 3;
-
-			while (stepNum_03 > 0)
-			{
-				conv_Kerel_Test->upMatrix();
-				stepNum_03--;
-			}
-		}
-	};
+      while (stepNum_03 > 0)
+      {
+        conv_Kerel_Test->upMatrix();
+        stepNum_03--;
+      }
+    }
+  };
 }

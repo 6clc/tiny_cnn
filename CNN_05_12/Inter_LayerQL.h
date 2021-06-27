@@ -6,43 +6,41 @@
 
 namespace tinyDNN
 {
-	template <typename Dtype>
-	class LayerQL;
+  template <typename Dtype>
+  class LayerQL;
 
-	template <typename Dtype>
-	class Inter_LayerQL
-	{
-	public:
-		friend class Test;
-		//friend calss Mnist_Conv_Test;
-		
-		template <typename Dtype> 
-		friend std::shared_ptr<Inter_LayerQL<Dtype>> operator+(std::shared_ptr<Inter_LayerQL<Dtype>>& operLeft, std::shared_ptr<LayerQL<Dtype>>& operRight);
+  template <typename Dtype>
+  class Inter_LayerQL
+  {
+  public:
+    friend class Test;
+    //friend calss Mnist_Conv_Test;
 
-		Inter_LayerQL(int rowNum = 0, int colNum = 0);
-		~Inter_LayerQL();
+    friend std::shared_ptr<Inter_LayerQL<Dtype>> operator+(std::shared_ptr<Inter_LayerQL<Dtype>> &operLeft, std::shared_ptr<LayerQL<Dtype>> &operRight);
 
-	public:
-		std::shared_ptr<MatrixQL<Dtype>> forward_Matrix;
-		std::shared_ptr<MatrixQL<Dtype>> backward_Matrix;
+    Inter_LayerQL(int rowNum=0, int colNum=0);
+    ~Inter_LayerQL();
 
-		std::vector<std::shared_ptr<MatrixQL<Dtype>>> forward_Matrix_Vector;
-		std::vector<std::shared_ptr<MatrixQL<Dtype>>> backward_Matrix_Vector;
-	};
+  public:
+    std::shared_ptr<MatrixQL<Dtype>> forward_Matrix;
+    std::shared_ptr<MatrixQL<Dtype>> backward_Matrix;
 
-	template <typename Dtype>
-	Inter_LayerQL<Dtype>::Inter_LayerQL(int rowNum = 0, int colNum = 0)
-	{
-		std::cout << "Inter_Layer Start!" << std::endl;
+    std::vector<std::shared_ptr<MatrixQL<Dtype>>> forward_Matrix_Vector;
+    std::vector<std::shared_ptr<MatrixQL<Dtype>>> backward_Matrix_Vector;
+  };
 
-		//中间层的前向层和反向层
-		this->forward_Matrix = std::make_unique<MatrixQL<Dtype>>(rowNum, colNum);
-		this->backward_Matrix = std::make_unique<MatrixQL<Dtype>>(rowNum, colNum);
-	}
+  template <typename Dtype>
+  Inter_LayerQL<Dtype>::Inter_LayerQL(int rowNum, int colNum)
+  {
+    std::cout << "Inter_Layer Start!" << std::endl;
 
-	template <typename Dtype>
-	Inter_LayerQL<Dtype>::~Inter_LayerQL()
-	{
-		std::cout << "Inter_Layer End!" << std::endl;
-	}
+    this->forward_Matrix = std::make_unique<MatrixQL<Dtype>>(rowNum, colNum);
+    this->backward_Matrix = std::make_unique<MatrixQL<Dtype>>(rowNum, colNum);
+  }
+
+  template <typename Dtype>
+  Inter_LayerQL<Dtype>::~Inter_LayerQL()
+  {
+    std::cout << "Inter_Layer End!" << std::endl;
+  }
 }
