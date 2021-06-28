@@ -44,7 +44,8 @@ namespace tinyDNN
     friend void rightValue(std::shared_ptr<Inter_LayerQL<double>> inLayer, std::shared_ptr<Inter_LayerQL<double>> endLayer, std::shared_ptr<LayerQL<double>> lossLayer);
     //friend void Cifar10_T2_1();
 
-    friend std::shared_ptr<Inter_LayerQL<Dtype>> operator+(std::shared_ptr<Inter_LayerQL<Dtype>> &operLeft, std::shared_ptr<LayerQL<Dtype>> &operRight);
+    template<typename T>
+    friend std::shared_ptr<Inter_LayerQL<T>> operator+(std::shared_ptr<Inter_LayerQL<T>> &operLeft, std::shared_ptr<LayerQL<T>> &operRight);
 
     double upFull;
     double upConv;

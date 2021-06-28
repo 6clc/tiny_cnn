@@ -23,7 +23,7 @@ namespace tinyDNN
 	};
 
 	template <typename Dtype>
-	Sigmoid_LayerQL<Dtype>::Sigmoid_LayerQL(LayerType type) : LayerQL(type)
+	Sigmoid_LayerQL<Dtype>::Sigmoid_LayerQL(LayerType type) : LayerQL<Dtype>(type)
 	{
 		std::cout << "Sigmoid_LayerQL Start!" << std::endl;
 	}
@@ -35,7 +35,7 @@ namespace tinyDNN
 	}
 
 	template <typename Dtype>
-	void Sigmoid_LayerQL<Dtype>::calForward(int type = 0) const
+	void Sigmoid_LayerQL<Dtype>::calForward(int type) const
 	{
 		switch (this->layerType)
 		{
@@ -51,7 +51,7 @@ namespace tinyDNN
 	template <typename Dtype>
 	void Sigmoid_LayerQL<Dtype>::calForward_Matrix() const
 	{
-		//Ç°Ïò´«²¥
+		//Ç°ï¿½ò´«²ï¿½
 		this->right_Layer->forward_Matrix->setMatrixQL() = 1.0 / ((-1.0 * (this->left_Layer->forward_Matrix->getMatrixQL())).array().exp() + 1.0);
 	}
 
@@ -72,7 +72,7 @@ namespace tinyDNN
 	}
 
 	template <typename Dtype>
-	void Sigmoid_LayerQL<Dtype>::calBackward(int type = 0)
+	void Sigmoid_LayerQL<Dtype>::calBackward(int type)
 	{
 		switch (this->layerType)
 		{
@@ -88,7 +88,7 @@ namespace tinyDNN
 	template <typename Dtype>
 	void Sigmoid_LayerQL<Dtype>::calBackward_Matrix()
 	{
-		//·´Ïò´«²¥£¬ÐèÒªÇ°Ïò´«²¥µÄ²ÎÊý
+		//ï¿½ï¿½ï¿½ò´«²ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÇ°ï¿½ò´«²ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
 		this->left_Layer->backward_Matrix->setMatrixQL() = this->right_Layer->backward_Matrix->getMatrixQL().array() *((this->right_Layer->forward_Matrix->getMatrixQL()).array() * (1 - (this->right_Layer->forward_Matrix->getMatrixQL()).array()));
 	}
 

@@ -2,7 +2,7 @@
 namespace tinyDNN
 {
   template <typename Dtype>
-  PooLayerQL<Dtype>::PooLayerQL(LayerType type, int rowNum, int colNum) : LayerQL(type), rowNum(rowNum), colNum(colNum)
+  PooLayerQL<Dtype>::PooLayerQL(LayerType type, int rowNum, int colNum) : LayerQL<Dtype>(type), rowNum(rowNum), colNum(colNum)
   {
     std::cout << "PooLayerQL Start!" << std::endl;
 
@@ -17,7 +17,7 @@ namespace tinyDNN
   }
   //��ǰ����
   template <typename Dtype>
-  void PooLayerQL<Dtype>::calForward(int type = 0) const
+  void PooLayerQL<Dtype>::calForward(int type) const
   {
     this->calForward_Vector_Average();
     //this->calForward_MaxNum();
@@ -79,7 +79,7 @@ namespace tinyDNN
   //========================================================================================================================
   //���򴫲�
   template <typename Dtype>
-  void PooLayerQL<Dtype>::calBackward(int type = 0)
+  void PooLayerQL<Dtype>::calBackward(int type)
   {
     //this->calBackward_Average();
     this->calBackward_Vector_Average();
