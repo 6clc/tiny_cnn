@@ -2,85 +2,84 @@
 #include "LayerQL.h"
 namespace tinyDNN
 {
-	template <typename Dtype> 
-	class Bias_LayerQL : public LayerQL<Dtype>
-	{
-	public:
-		Bias_LayerQL( LayerType type, int rowNum, int colNum, Dtype ranNum);
-		~Bias_LayerQL() override final;
+  template <typename Dtype>
+  class Bias_LayerQL : public LayerQL<Dtype>
+  {
+  public:
+    Bias_LayerQL(LayerType type, int rowNum, int colNum, Dtype ranNum);
+    ~Bias_LayerQL() override final;
 
-		void calForward(int type = 0) const override final;
-		void calBackward(int type = 0) override final;
-		void upMatrix() override final;
-		void upMatrix_batch(Dtype upRate) override final;
-	protected:
-		std::unique_ptr<MatrixQL<Dtype>> b_MatrixQL;
-	};
-	//*******************************************************************************************************************************
-	template <typename Dtype>
-	Bias_LayerQL<Dtype>::Bias_LayerQL(LayerType type, int rowNum, int colNum, Dtype ranNum) : LayerQL(type)
-	{
-		std::cout << "Bias_LayerQL Start!" << std::endl;
-		this->b_MatrixQL = std::make_unique<MatrixQL<Dtype>>( rowNum, colNum);
-		//ÕâÀïºóÆÚÐèÒª¸Ä
-		this->b_MatrixQL->setMatrixQL().setConstant(ranNum);
-		//this->b_MatrixQL->setMatrixQL().setZero();
-	}
+    void calForward(int type = 0) const override final;
+    void calBackward(int type = 0) override final;
+    void upMatrix() override final;
+    void upMatrix_batch(Dtype upRate) override final;
 
-	template <typename Dtype>
-	Bias_LayerQL<Dtype>::~Bias_LayerQL()
-	{
-		std::cout << "Bias_LayerQL Over!" << std::endl;
-	}
+  protected:
+    std::unique_ptr<MatrixQL<Dtype>> b_MatrixQL;
+  };
+  //*******************************************************************************************************************************
+  template <typename Dtype>
+  Bias_LayerQL<Dtype>::Bias_LayerQL(LayerType type, int rowNum, int colNum, Dtype ranNum) : LayerQL<Dtype>(type)
+  {
+    std::cout << "Bias_LayerQL Start!" << std::endl;
+    this->b_MatrixQL = std::make_unique<MatrixQL<Dtype>>(rowNum, colNum);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½
+    this->b_MatrixQL->setMatrixQL().setConstant(ranNum);
+    //this->b_MatrixQL->setMatrixQL().setZero();
+  }
 
-	template <typename Dtype>
-	void Bias_LayerQL<Dtype>::calForward(int type = 0) const
-	{
-		//std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
+  template <typename Dtype>
+  Bias_LayerQL<Dtype>::~Bias_LayerQL()
+  {
+    std::cout << "Bias_LayerQL Over!" << std::endl;
+  }
 
-		//ÕâÀïÄ¬ÈÏbÖ»ÓÐÒ»ÐÐ£¬½á¹ûÕâÀï»á¶Ôb×öÒ»¸öÀ©Õ¹£¬¶ÔÃ¿Ò»ÐÐ¶¼¼ÓÉÏÒ»¸öb
-		int rowNum = this->left_Layer->forward_Matrix->getMatrixQL().rows();
-		std::unique_ptr<MatrixQL<Dtype>> oMatrix = std::make_unique<MatrixQL<Dtype>>(rowNum, 1);
-		oMatrix->setMatrixQL().setOnes();
+  template <typename Dtype>
+  void Bias_LayerQL<Dtype>::calForward(int type ) const
+  {
+    //std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
 
-		this->right_Layer->forward_Matrix->setMatrixQL() = this->left_Layer->forward_Matrix->getMatrixQL() + (oMatrix->getMatrixQL())*(this->b_MatrixQL->getMatrixQL());
+    //ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½bÖ»ï¿½ï¿½Ò»ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½Ã¿Ò»ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½b
+    int rowNum = this->left_Layer->forward_Matrix->getMatrixQL().rows();
+    std::unique_ptr<MatrixQL<Dtype>> oMatrix = std::make_unique<MatrixQL<Dtype>>(rowNum, 1);
+    oMatrix->setMatrixQL().setOnes();
 
-		//==========================================================================================
+    this->right_Layer->forward_Matrix->setMatrixQL() = this->left_Layer->forward_Matrix->getMatrixQL() + (oMatrix->getMatrixQL()) * (this->b_MatrixQL->getMatrixQL());
 
-		////Õâ¸öÊÇµ¥ÐÐÊäÈëµÄËùÓÃÃüÁî,µ±²ÉÓÃSGDµÄÊ±ºòÕâ¸ö»á¿ìÒ»Ð©
-		//this->right_Layer->forward_Matrix->setMatrixQL() = this->left_Layer->forward_Matrix->getMatrixQL() + (this->b_MatrixQL->getMatrixQL());
+    //==========================================================================================
 
-	}
+    ////ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SGDï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ð©
+    //this->right_Layer->forward_Matrix->setMatrixQL() = this->left_Layer->forward_Matrix->getMatrixQL() + (this->b_MatrixQL->getMatrixQL());
+  }
 
-	template <typename Dtype>
-	void Bias_LayerQL<Dtype>::calBackward(int type = 0)
-	{
-		//std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
+  template <typename Dtype>
+  void Bias_LayerQL<Dtype>::calBackward(int type )
+  {
+    //std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
 
-		//·´Ïò´«²¥£¬Ö±½Ó¹ýÈ¥¾ÍºÃ
-		this->left_Layer->backward_Matrix->setMatrixQL() = this->right_Layer->backward_Matrix->getMatrixQL();
-	}
+    //ï¿½ï¿½ï¿½ò´«²ï¿½ï¿½ï¿½Ö±ï¿½Ó¹ï¿½È¥ï¿½Íºï¿½
+    this->left_Layer->backward_Matrix->setMatrixQL() = this->right_Layer->backward_Matrix->getMatrixQL();
+  }
 
-	template <typename Dtype>
-	void Bias_LayerQL<Dtype>::upMatrix()
-	{
-		//std::cout << this->right_Layer->backward_Matrix->getMatrixQL() << std::endl;
+  template <typename Dtype>
+  void Bias_LayerQL<Dtype>::upMatrix()
+  {
+    //std::cout << this->right_Layer->backward_Matrix->getMatrixQL() << std::endl;
 
-		//Æ«ÖÃ¸üÐÂ£¬ÕâÀïÑ§Ï°ÂÊÉèÖÃÎª0.5
-		this->b_MatrixQL->setMatrixQL() = this->b_MatrixQL->getMatrixQL() - 0.5 * (this->right_Layer->backward_Matrix->getMatrixQL());
+    //Æ«ï¿½Ã¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½Ñ§Ï°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0.5
+    this->b_MatrixQL->setMatrixQL() = this->b_MatrixQL->getMatrixQL() - 0.5 * (this->right_Layer->backward_Matrix->getMatrixQL());
 
-		//std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
-	}
+    //std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
+  }
 
-	template <typename Dtype>
-	void Bias_LayerQL<Dtype>::upMatrix_batch(Dtype upRate)
-	{
-		//std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
+  template <typename Dtype>
+  void Bias_LayerQL<Dtype>::upMatrix_batch(Dtype upRate)
+  {
+    //std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
 
-		//Æ«ÖÃ¸üÐÂ£¬ÕâÀïÐèÒª¶Ô·´ÏòµÄ°´ÐÐÇóºÍÈ»ºóÇó¾ùÖµ
-		this->b_MatrixQL->setMatrixQL() = this->b_MatrixQL->getMatrixQL() - 0.1 * this->right_Layer->backward_Matrix->getMatrixQL().colwise().sum();
+    //Æ«ï¿½Ã¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ô·ï¿½ï¿½ï¿½Ä°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    this->b_MatrixQL->setMatrixQL() = this->b_MatrixQL->getMatrixQL() - 0.1 * this->right_Layer->backward_Matrix->getMatrixQL().colwise().sum();
 
-		//std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
-
-	}
+    //std::cout << this->b_MatrixQL->getMatrixQL() << std::endl;
+  }
 }

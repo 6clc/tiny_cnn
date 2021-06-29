@@ -7,7 +7,7 @@ namespace tinyDNN
 	class Data_AugmentationQL : public LayerQL<Dtype>
 	{
 	public:
-		Data_AugmentationQL(LayerType type, int rowNum, int colNum) : LayerQL(type), rowNum(rowNum), colNum(colNum)
+		Data_AugmentationQL(LayerType type, int rowNum, int colNum) : LayerQL<Dtype>(type), rowNum(rowNum), colNum(colNum)
 		{
 			std::cout << "Data_AugmentationQL Start!" << std::endl;
 		}

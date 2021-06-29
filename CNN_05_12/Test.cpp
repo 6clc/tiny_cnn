@@ -335,7 +335,7 @@ namespace tinyDNN
     std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
 
     //	 ������س�ʼʱ��
-    DWORD load_time = GetTickCount();
+    //DWORD load_time = GetTickCount();
 
     for (int i = 0; i < 2; i++)
     {
@@ -388,10 +388,10 @@ namespace tinyDNN
     std::cout << numTotal / 10000.00 << std::endl;
 
     //ѵ���Ͳ�������ʱ��
-    DWORD star_time = GetTickCount();
+    // DWORD star_time = GetTickCount();
 
     //��������ʱ��
-    std::cout << "����������ʱ��Ϊ��" << (star_time - load_time) << "ms." << std::endl;
+   // std::cout << "����������ʱ��Ϊ��" << (star_time - load_time) << "ms." << std::endl;
   }
 
   void Test::Mnist_Test_02()
@@ -422,7 +422,7 @@ namespace tinyDNN
     std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
 
     //������س�ʼʱ��
-    DWORD load_time = GetTickCount();
+   // DWORD load_time = GetTickCount();
 
     //��ͷ��ʼ����
     for (int i = 0; i < 2; i++)
@@ -472,9 +472,9 @@ namespace tinyDNN
     //������ȷ��
     std::cout << numTotal / 10000.00 << std::endl;
     //ѵ���Ͳ�������ʱ��
-    DWORD star_time = GetTickCount();
+  //  DWORD star_time = GetTickCount();
     //��������ʱ��
-    std::cout << "����������ʱ��Ϊ��" << (star_time - load_time) << "ms." << std::endl;
+    // std::cout << "����������ʱ��Ϊ��" << (star_time - load_time) << "ms." << std::endl;
   }
 
   void Test::Mnist_Test_03()
@@ -503,7 +503,7 @@ namespace tinyDNN
     std::shared_ptr<Inter_LayerQL<double>> inLayer_08 = inLayer_07 + lossLayer_01;
 
     //������س�ʼʱ��
-    DWORD load_time = GetTickCount();
+  //  DWORD load_time = GetTickCount();
     //ѵ����ʼ
     for (int i = 0; i < 2; i++)
     {
@@ -552,9 +552,9 @@ namespace tinyDNN
     //������ȷ��
     std::cout << numTotal / 10000.00 << std::endl;
     //	ѵ���Ͳ�������ʱ��
-    DWORD star_time = GetTickCount();
+  //  DWORD star_time = GetTickCount();
     //�������ʱ��
-    std::cout << "����������ʱ��Ϊ��" << (star_time - load_time) << "ms." << std::endl;
+    //std::cout << "����������ʱ��Ϊ��" << (star_time - load_time) << "ms." << std::endl;
   }
 
   void Test::Mnist_Test_Conv()

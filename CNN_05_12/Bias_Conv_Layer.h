@@ -7,7 +7,7 @@ namespace tinyDNN
   {
   public:
     //									   ��Ƭ			 ����		 ����
-    Bias_Conv_Layer(LayerType type, int kernelNum, int rowNum, int colNum) : LayerQL(type), kernelNum(kernelNum), rowNum(rowNum), colNum(colNum)
+    Bias_Conv_Layer(LayerType type, int kernelNum, int rowNum, int colNum) : LayerQL<Dtype>(type), kernelNum(kernelNum), rowNum(rowNum), colNum(colNum)
     {
       std::cout << "Bias_Conv_Layer Start!" << std::endl;
 
