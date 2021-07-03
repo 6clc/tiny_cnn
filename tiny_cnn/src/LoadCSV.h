@@ -18,11 +18,8 @@ namespace tinyDNN
     ~LoadCSV();
 
     static void loadCSVTrain();
-    //װ��һάMnist���Լ�
     static void loadCSVTest();
-    //��ѵ����ͼƬת��ΪVectorͼƬ����
     static void loadCSV_Train_Vector();
-    //�����Լ�ͼƬת��ΪVectorͼƬ����
     static void loadCSV_Test_Vector();
 
     //**********************************************************
